@@ -1,0 +1,15 @@
+daily 03/06
+iniciei o projeto, fiz apenas a tela inicial 
+pretendo dar funcionalidade aos botões 
+sem duvidas 
+
+daily 04/06
+organizei em pastas assim como o Guilherme F. avia me orientado,
+dei inicio aos botões de cadastro de cliente e de gerente 
+sem duvidas 
+
+
+
+
+
+
