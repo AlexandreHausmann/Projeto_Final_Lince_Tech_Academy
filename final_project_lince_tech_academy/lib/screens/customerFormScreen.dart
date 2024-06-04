@@ -65,10 +65,10 @@ class _CustomerFormScreenState extends State<CustomerFormScreen> {
               ),
               TextFormField(
                 controller: _cnpjController,
-                decoration: InputDecoration(labelText: 'CNPJ'),
+                decoration: InputDecoration(labelText: 'CPF'),
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return 'Por favor, insira o CNPJ';
+                    return 'Por favor, insira o CPF';
                   }
                   return null;
                 },
