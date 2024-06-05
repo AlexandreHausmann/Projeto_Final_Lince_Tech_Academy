@@ -1,58 +1,50 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../providers/customerProvider.dart';
-import '../models/customer.dart';
+import '../models/manager.dart';
+import '../providers/managerProvider.dart';
 
-class CustomerFormScreen extends StatefulWidget {
-  final Customer? customer;
+class ManagerFormScreen extends StatefulWidget {
+  final Manager? manager;
 
-  CustomerFormScreen({this.customer});
+  ManagerFormScreen({this.manager});
 
   @override
-  _CustomerFormScreenState createState() => _CustomerFormScreenState();
+  _ManagerFormScreenState createState() => _ManagerFormScreenState();
 }
 
-class _CustomerFormScreenState extends State<CustomerFormScreen> {
+class _ManagerFormScreenState extends State<ManagerFormScreen> {
   final _formKey = GlobalKey<FormState>();
   late String _name;
-  late String _phone;
-  late String _cnpj;
-  late String _city;
+  late String _cpf;
   late String _state;
+  late String _phone;
+  late double _commissionPercentage;
 
   @override
   void initState() {
     super.initState();
-    if (widget.customer != null) {
-      _name = widget.customer!.name;
-      _phone = widget.customer!.phone;
-      _cnpj = widget.customer!.cnpj;
-      _city = widget.customer!.city;
-      _state = widget.customer!.state;
-    } else {
-      _name = '';
-      _phone = '';
-      _cnpj = '';
-      _city = '';
-      _state = '';
-    }
+    _name = widget.manager?.name ?? '';
+    _cpf = widget.manager?.cpf ?? '';
+    _state = widget.manager?.state ?? '';
+    _phone = widget.manager?.phone ?? '';
+    _commissionPercentage = widget.manager?.commissionPercentage ?? 0.0;
   }
 
   void _saveForm() {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      final newCustomer = Customer(
-        id: widget.customer?.id ?? DateTime.now().millisecondsSinceEpoch,
+      final newManager = Manager(
+        id: widget.manager?.id ?? DateTime.now().millisecondsSinceEpoch,
         name: _name,
-        phone: _phone,
-        cnpj: _cnpj,
-        city: _city,
+        cpf: _cpf,
         state: _state,
+        phone: _phone,
+        commissionPercentage: _commissionPercentage,
       );
-      if (widget.customer == null) {
-        Provider.of<CustomerProvider>(context, listen: false).addCustomer(newCustomer);
+      if (widget.manager == null) {
+        Provider.of<ManagerProvider>(context, listen: false).addManager(newManager);
       } else {
-        Provider.of<CustomerProvider>(context, listen: false).updateCustomer(newCustomer);
+        Provider.of<ManagerProvider>(context, listen: false).updateManager(newManager);
       }
       Navigator.pop(context);
     }
@@ -62,7 +54,7 @@ class _CustomerFormScreenState extends State<CustomerFormScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.customer == null ? 'Novo Cliente' : 'Editar Cliente'),
+        title: Text(widget.manager == null ? 'Novo Gerente' : 'Editar Gerente'),
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
@@ -84,42 +76,16 @@ class _CustomerFormScreenState extends State<CustomerFormScreen> {
                 },
               ),
               TextFormField(
-                initialValue: _phone,
-                decoration: InputDecoration(labelText: 'Telefone'),
+                initialValue: _cpf,
+                decoration: InputDecoration(labelText: 'CPF'),
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return 'Por favor, insira o telefone';
+                    return 'Por favor, insira o CPF';
                   }
                   return null;
                 },
                 onSaved: (value) {
-                  _phone = value!;
-                },
-              ),
-              TextFormField(
-                initialValue: _cnpj,
-                decoration: InputDecoration(labelText: 'CNPJ'),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Por favor, insira o CNPJ';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  _cnpj = value!;
-                },
-              ),
-              TextFormField(
-                initialValue: _city,
-                decoration: InputDecoration(labelText: 'Cidade'),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Por favor, insira a cidade';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  _city = value!;
+                  _cpf = value!;
                 },
               ),
               TextFormField(
@@ -135,10 +101,39 @@ class _CustomerFormScreenState extends State<CustomerFormScreen> {
                   _state = value!;
                 },
               ),
+              TextFormField(
+                initialValue: _phone,
+                decoration: InputDecoration(labelText: 'Telefone'),
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Por favor, insira o telefone';
+                  }
+                  return null;
+                },
+                onSaved: (value) {
+                  _phone = value!;
+                },
+              ),
+              TextFormField(
+                initialValue: _commissionPercentage.toString(),
+                decoration: InputDecoration(labelText: 'Percentual de Comissão'),
+                keyboardType: TextInputType.number,
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Por favor, insira o percentual de comissão';
+                  }
+                  return null;
+                },
+                onSaved: (value) {
+                  _commissionPercentage = double.parse(value!);
+                },
+              ),
               SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _saveForm,
-                child: Text('Salvar'),
+              Center(
+                child: ElevatedButton(
+                  onPressed: _saveForm,
+                  child: Text('Salvar'),
+                ),
               ),
             ],
           ),

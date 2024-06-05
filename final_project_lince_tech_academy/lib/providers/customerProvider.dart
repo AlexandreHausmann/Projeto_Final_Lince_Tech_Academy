@@ -18,4 +18,13 @@ class CustomerProvider with ChangeNotifier {
     _customers.add(customer);
     notifyListeners();
   }
+
+  void updateCustomer(Customer customer) {
+    DatabaseService.instance.updateCustomer(customer);
+    final index = _customers.indexWhere((c) => c.id == customer.id);
+    if (index != -1) {
+      _customers[index] = customer;
+      notifyListeners();
+    }
+  }
 }

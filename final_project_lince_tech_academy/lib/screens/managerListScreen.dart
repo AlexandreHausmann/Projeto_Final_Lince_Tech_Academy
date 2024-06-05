@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../providers/customerProvider.dart';
-import 'customerFormScreen.dart';
+import 'managerFormScreen.dart';
+import '../providers/managerProvider.dart';
 
-class CustomerListScreen extends StatelessWidget {
+class ManagerListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Clientes'),
+        title: Text('Gerentes'),
       ),
       body: Stack(
         children: [
@@ -19,21 +19,21 @@ class CustomerListScreen extends StatelessWidget {
             ),
           ),
           Container(
-            color: Colors.black.withOpacity(0.7), 
+            color: Colors.black.withOpacity(0.7),
           ),
-          Consumer<CustomerProvider>(
+          Consumer<ManagerProvider>(
             builder: (context, provider, child) {
               return ListView.builder(
-                itemCount: provider.customers.length,
+                itemCount: provider.managers.length,
                 itemBuilder: (context, index) {
-                  final customer = provider.customers[index];
+                  final manager = provider.managers[index];
                   return ListTile(
-                    title: Text(customer.name),
-                    subtitle: Text(customer.phone),
+                    title: Text(manager.name),
+                    subtitle: Text(manager.phone),
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => CustomerFormScreen(customer: customer)),
+                        MaterialPageRoute(builder: (context) => ManagerFormScreen(manager: manager)),
                       );
                     },
                   );
@@ -47,7 +47,7 @@ class CustomerListScreen extends StatelessWidget {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => CustomerFormScreen()),
+            MaterialPageRoute(builder: (context) => ManagerFormScreen()),
           );
         },
         child: Icon(Icons.add),
