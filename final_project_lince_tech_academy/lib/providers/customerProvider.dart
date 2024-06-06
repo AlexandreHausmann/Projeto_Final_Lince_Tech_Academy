@@ -7,6 +7,10 @@ class CustomerProvider with ChangeNotifier {
 
   List<Customer> get customers => _customers;
 
+  CustomerProvider() {
+    fetchCustomers();
+  }
+
   Future<void> fetchCustomers() async {
     final dataList = await DatabaseService.instance.getAllCustomers();
     _customers = dataList.map((item) => Customer.fromMap(item as Map<String, dynamic>)).toList();

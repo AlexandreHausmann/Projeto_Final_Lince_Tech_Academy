@@ -7,6 +7,10 @@ class ManagerProvider with ChangeNotifier {
 
   List<Manager> get managers => _managers;
 
+  ManagerProvider() {
+    fetchManagers();
+  }
+
   Future<void> fetchManagers() async {
     final dataList = await DatabaseService.instance.getAllManagers();
     _managers = dataList.map((item) => Manager.fromMap(item as Map<String, dynamic>)).toList();

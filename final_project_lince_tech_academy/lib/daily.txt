@@ -8,8 +8,23 @@ organizei em pastas assim como o Guilherme F. avia me orientado,
 dei inicio aos botões de cadastro de cliente e de gerente 
 sem duvidas 
 
+daily 05/06
+fiz a parte de cadastro de gerente configurei algumas coisinhas 
+adicionei o banco ao projeto 
+pretendo fazer a parte de adicionar veiculos com a foto tenho que ver como que vou fazer 
+sem duvidas 
 
+//conselho do guilherme F. salvar as fotos no próprio celular e não no banco
 
+daily 06/06
+não consegui produzir muito na parte da manha, por conta de alguns imprevistos, 
+para essa tarde quero ver como vou fazer pra adicionar os veiculos com foto 
+sem duvida 
 
-
-
+mentoria 06/06
+o projeto ta em andamento ja fiz a parte de cadastro de clientes e gerentes, não tem muitas validaçoes
+e sem muitos detalhes, um detalhe é a logo pronta e eu pesquisei
+por fora a questão da opacidade da imagem achei bem interessante, vou utilizar no darck mode 
+questão de detalhes e validações eu vou deixar para o final quando estiver fazendo os testes
+para essa tarde quero ver como vou fazer pra adicionar os veiculos com foto 
+sem duvida 

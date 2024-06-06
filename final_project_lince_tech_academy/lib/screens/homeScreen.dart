@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'customerListScreen.dart';
 import 'managerListScreen.dart';
-import 'customerFormScreen.dart';
+import 'vehicleListScreen.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -50,7 +50,10 @@ class HomeScreen extends StatelessWidget {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    // Navegação para tela de veículos
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => VehicleListScreen()),
+                    );
                   },
                   child: Text('Veículos'),
                 ),

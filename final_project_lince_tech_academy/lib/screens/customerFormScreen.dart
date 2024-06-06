@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../providers/customerProvider.dart';
 import '../models/customer.dart';
+import '../providers/customerProvider.dart';
 
 class CustomerFormScreen extends StatefulWidget {
   final Customer? customer;
@@ -23,19 +23,11 @@ class _CustomerFormScreenState extends State<CustomerFormScreen> {
   @override
   void initState() {
     super.initState();
-    if (widget.customer != null) {
-      _name = widget.customer!.name;
-      _phone = widget.customer!.phone;
-      _cnpj = widget.customer!.cnpj;
-      _city = widget.customer!.city;
-      _state = widget.customer!.state;
-    } else {
-      _name = '';
-      _phone = '';
-      _cnpj = '';
-      _city = '';
-      _state = '';
-    }
+    _name = widget.customer?.name ?? '';
+    _phone = widget.customer?.phone ?? '';
+    _cnpj = widget.customer?.cnpj ?? '';
+    _city = widget.customer?.city ?? '';
+    _state = widget.customer?.state ?? '';
   }
 
   void _saveForm() {
@@ -136,9 +128,11 @@ class _CustomerFormScreenState extends State<CustomerFormScreen> {
                 },
               ),
               SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _saveForm,
-                child: Text('Salvar'),
+              Center(
+                child: ElevatedButton(
+                  onPressed: _saveForm,
+                  child: Text('Salvar'),
+                ),
               ),
             ],
           ),

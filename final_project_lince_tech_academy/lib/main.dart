@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'providers/customerProvider.dart';
-import 'screens/homeScreen.dart';
 import 'providers/managerProvider.dart';
+import 'providers/vehicleProvider.dart';
+import 'screens/homeScreen.dart';
 
 void main() {
   runApp(MyApp());
@@ -14,7 +15,8 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => CustomerProvider()),
-        ChangeNotifierProvider(create: (_) => ManagerProvider()), // Adicione o ManagerProvider aqui
+        ChangeNotifierProvider(create: (_) => ManagerProvider()),
+        ChangeNotifierProvider(create: (_) => VehicleProvider()),
       ],
       child: MaterialApp(
         title: 'SS Automoveis',
