@@ -158,7 +158,7 @@ class _VehicleFormScreenState extends State<VehicleFormScreen> {
                   onSaved: (value) {
                     _dailyRate = double.parse(value!);
                   },
-                ),
+                   ),
                 SizedBox(height: 20),
                 _image != null
                     ? Image.file(
@@ -167,7 +167,14 @@ class _VehicleFormScreenState extends State<VehicleFormScreen> {
                         height: 200,
                         fit: BoxFit.cover,
                       )
-                    : SizedBox.shrink(),
+                    : _imagePath.isNotEmpty
+                        ? Image.file(
+                            File(_imagePath),
+                            width: double.infinity,
+                            height: 200,
+                            fit: BoxFit.cover,
+                          )
+                        : SizedBox.shrink(),
                 ElevatedButton(
                   onPressed: _pickImage,
                   child: Text('Selecionar Imagem'),

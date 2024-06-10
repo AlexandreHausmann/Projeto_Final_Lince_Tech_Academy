@@ -1,3 +1,4 @@
+import 'package:final_project_lince_tech_academy/screens/rentListScreen.dart';
 import 'package:flutter/material.dart';
 import 'customerListScreen.dart';
 import 'managerListScreen.dart';
@@ -59,6 +60,10 @@ class HomeScreen extends StatelessWidget {
                 ),
                 ElevatedButton(
                   onPressed: () {
+                    Navigator.push(
+                      context, 
+                      MaterialPageRoute(builder: (context) => RentListScreen()),
+                      );
                     // Navegação para tela de aluguéis
                   },
                   child: Text('Aluguéis'),

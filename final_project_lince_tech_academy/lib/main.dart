@@ -1,3 +1,4 @@
+import 'package:final_project_lince_tech_academy/providers/rentProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'providers/customerProvider.dart';
@@ -17,6 +18,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => CustomerProvider()),
         ChangeNotifierProvider(create: (_) => ManagerProvider()),
         ChangeNotifierProvider(create: (_) => VehicleProvider()),
+        ChangeNotifierProvider(create: (_) => RentProvider()),
+
+
       ],
       child: MaterialApp(
         title: 'SS Automoveis',

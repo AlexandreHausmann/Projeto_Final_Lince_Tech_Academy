@@ -33,7 +33,7 @@ dependencies:
   sqflite: ^2.0.0+4
   provider: ^6.0.0
   shared_preferences: ^2.0.6
-  image_picker: ^0.8.4+7
+  image_picker: ^0.8.4+4
   intl: ^0.17.0
   pdf: ^3.3.0
   http: ^0.13.3

@@ -29,7 +29,7 @@ class Vehicle {
     };
   }
 
-  factory Vehicle.fromMap(Map<String, dynamic> map) {
+  static Vehicle fromMap(Map<String, dynamic> map) {
     return Vehicle(
       id: map['id'],
       brand: map['brand'],

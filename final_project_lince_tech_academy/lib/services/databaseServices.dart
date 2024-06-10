@@ -2,7 +2,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import '../models/customer.dart';
 import '../models/manager.dart';
-import '../models/vehicle.dart';
+import '../models/rent.dart';
 
 class DatabaseService {
   static final DatabaseService instance = DatabaseService._init();
@@ -46,21 +46,21 @@ class DatabaseService {
       )
     ''';
 
-    const vehicleTable = '''
-      CREATE TABLE vehicles (
+    const rentTable = '''
+      CREATE TABLE rents (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        brand TEXT,
-        model TEXT,
-        plate TEXT,
-        year INTEGER,
-        dailyRate REAL,
-        imagePath TEXT
+        customerId INTEGER,
+        startDate TEXT,
+        endDate TEXT,
+        totalDays INTEGER,
+        totalAmount REAL,
+        FOREIGN KEY (customerId) REFERENCES customers(id)
       )
     ''';
 
     await db.execute(customerTable);
     await db.execute(managerTable);
-    await db.execute(vehicleTable);
+    await db.execute(rentTable);
   }
 
   // Customer methods
@@ -105,24 +105,33 @@ class DatabaseService {
     return await db.query('managers');
   }
 
-  // Vehicle methods
-  Future<void> insertVehicle(Vehicle vehicle) async {
+  // Rent methods
+  Future<void> insertRent(Rent rent) async {
     final db = await instance.database;
-    await db.insert('vehicles', vehicle.toMap());
+    await db.insert('rents', rent.toMap());
   }
 
-  Future<void> updateVehicle(Vehicle vehicle) async {
+  Future<void> updateRent(Rent rent) async {
     final db = await instance.database;
     await db.update(
-      'vehicles',
-      vehicle.toMap(),
+      'rents',
+      rent.toMap(),
       where: 'id = ?',
-      whereArgs: [vehicle.id],
+      whereArgs: [rent.id],
     );
   }
 
-  Future<List<Map<String, dynamic>>> getAllVehicles() async {
+  Future<void> deleteRent(int id) async {
     final db = await instance.database;
-    return await db.query('vehicles');
+    await db.delete(
+      'rents',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+  Future<List<Map<String, dynamic>>> getAllRents() async {
+    final db = await instance.database;
+    return await db.query('rents');
   }
 }

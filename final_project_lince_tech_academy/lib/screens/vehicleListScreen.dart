@@ -1,7 +1,7 @@
 import 'dart:io';
-import 'package:final_project_lince_tech_academy/providers/vehicleProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../providers/vehicleProvider.dart';
 import 'vehicleFormScreen.dart';
 
 class VehicleListScreen extends StatelessWidget {
@@ -26,7 +26,7 @@ class VehicleListScreen extends StatelessWidget {
             builder: (context, vehicleProvider, child) {
               vehicleProvider.fetchVehicles();
               final vehicles = vehicleProvider.vehicles;
-
+              print(vehicles);
               return ListView.builder(
                 itemCount: vehicles.length,
                 itemBuilder: (context, index) {
@@ -41,7 +41,7 @@ class VehicleListScreen extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => VehicleFormScreen(vehicle: vehicle)),
-                      );
+                      ).then((_) => vehicleProvider.fetchVehicles());
                     },
                   );
                 },
@@ -55,7 +55,9 @@ class VehicleListScreen extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => VehicleFormScreen()),
-          );
+          ).then((_) {
+            Provider.of<VehicleProvider>(context, listen: false).fetchVehicles();
+          });
         },
         child: Icon(Icons.add),
       ),

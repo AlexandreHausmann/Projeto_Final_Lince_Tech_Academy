@@ -28,3 +28,16 @@ por fora a questão da opacidade da imagem achei bem interessante, vou utilizar 
 questão de detalhes e validações eu vou deixar para o final quando estiver fazendo os testes
 para essa tarde quero ver como vou fazer pra adicionar os veiculos com foto 
 sem duvida 
+
+daily 07/06
+adicionei o cadastro de veiculos, falta alguns detalhes 
+para hoje vou ver os detalhes que estão faltando que é relacionado a banco e a parte de lista 
+sem duvidas 
+
+// rever oque esta acontecendo pq não esta aparecendo a lista de veiculos,
+ ver como que vou fazer para adicionar fotos ao emulador 
+
+ daily 10/06
+ consegui resolver o problema que estava tendo com a tabela de veiculos 
+ dei inicio a implementação de aluguéis realizados vou trabalhar nisso essa tarde 
+ sem duvidas 
