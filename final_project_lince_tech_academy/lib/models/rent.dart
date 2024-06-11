@@ -1,40 +1,42 @@
 class Rent {
   final int id;
-  final int clientId; // ID do cliente
+  final String clientName;
+  final String vehicleModel;
   final DateTime startDate;
   final DateTime endDate;
-  final int numberOfDays;
+  final int totalDays;
   final double totalAmount;
 
   Rent({
     required this.id,
-    required this.clientId,
+    required this.clientName,
+    required this.vehicleModel,
     required this.startDate,
     required this.endDate,
-    required this.numberOfDays,
+    required this.totalDays,
     required this.totalAmount,
   });
 
-  // Método para mapear os dados do aluguel para um mapa
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'clientId': clientId,
+      'clientName': clientName,
+      'vehicleModel': vehicleModel,
       'startDate': startDate.toIso8601String(),
       'endDate': endDate.toIso8601String(),
-      'numberOfDays': numberOfDays,
+      'totalDays': totalDays,
       'totalAmount': totalAmount,
     };
   }
 
-  // Método para criar um objeto de aluguel a partir de um mapa
   factory Rent.fromMap(Map<String, dynamic> map) {
     return Rent(
       id: map['id'],
-      clientId: map['clientId'],
+      clientName: map['clientName'],
+      vehicleModel: map['vehicleModel'],
       startDate: DateTime.parse(map['startDate']),
       endDate: DateTime.parse(map['endDate']),
-      numberOfDays: map['numberOfDays'],
+      totalDays: map['totalDays'],
       totalAmount: map['totalAmount'],
     );
   }

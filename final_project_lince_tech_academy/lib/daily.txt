@@ -39,5 +39,15 @@ sem duvidas
 
  daily 10/06
  consegui resolver o problema que estava tendo com a tabela de veiculos 
- dei inicio a implementação de aluguéis realizados vou trabalhar nisso essa tarde 
+ dei inicio a implementação de aluguéis realizados, vou trabalhar nisso essa tarde 
  sem duvidas 
+
+daily 11/06 
+essa manha eu não consegui dar continuidade 
+pra essa tarde vou dar continuidade na parte de implementação de alugeuis realizados 
+se mduvidas 
+
+daily 12/06 
+implementei a parte de alugueis no banco tive que fazer o mesmo esquema de veiculos, database separadas 
+vou dar inicio agora as regras de negócio 
+sem duvidas 

@@ -46,21 +46,11 @@ class DatabaseService {
       )
     ''';
 
-    const rentTable = '''
-      CREATE TABLE rents (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        customerId INTEGER,
-        startDate TEXT,
-        endDate TEXT,
-        totalDays INTEGER,
-        totalAmount REAL,
-        FOREIGN KEY (customerId) REFERENCES customers(id)
-      )
-    ''';
+    
 
     await db.execute(customerTable);
     await db.execute(managerTable);
-    await db.execute(rentTable);
+ 
   }
 
   // Customer methods
@@ -105,33 +95,4 @@ class DatabaseService {
     return await db.query('managers');
   }
 
-  // Rent methods
-  Future<void> insertRent(Rent rent) async {
-    final db = await instance.database;
-    await db.insert('rents', rent.toMap());
-  }
-
-  Future<void> updateRent(Rent rent) async {
-    final db = await instance.database;
-    await db.update(
-      'rents',
-      rent.toMap(),
-      where: 'id = ?',
-      whereArgs: [rent.id],
-    );
-  }
-
-  Future<void> deleteRent(int id) async {
-    final db = await instance.database;
-    await db.delete(
-      'rents',
-      where: 'id = ?',
-      whereArgs: [id],
-    );
-  }
-
-  Future<List<Map<String, dynamic>>> getAllRents() async {
-    final db = await instance.database;
-    return await db.query('rents');
-  }
 }
