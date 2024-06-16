@@ -58,4 +58,13 @@ class VehicleDatabaseService {
       whereArgs: [vehicle.id],
     );
   }
+
+  Future<void> deleteVehicle(int vehicleId) async {
+    final db = await instance.database;
+    await db.delete(
+      'vehicles',
+      where: 'id = ?',
+      whereArgs: [vehicleId],
+    );
+  }
 }

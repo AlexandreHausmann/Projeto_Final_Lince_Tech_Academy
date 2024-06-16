@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/rent.dart';
-import '../providers/rentProvider.dart';
+import '../providers/rent_provider.dart';
 import 'package:intl/intl.dart';
 
 class RentFormScreen extends StatefulWidget {
   final Rent? rent;
 
-  RentFormScreen({this.rent});
+  const RentFormScreen({super.key, this.rent});
 
   @override
   _RentFormScreenState createState() => _RentFormScreenState();
@@ -90,7 +90,7 @@ class _RentFormScreenState extends State<RentFormScreen> {
               children: <Widget>[
                 TextFormField(
                   initialValue: _clientName,
-                  decoration: InputDecoration(labelText: 'Nome do Cliente'),
+                  decoration: const InputDecoration(labelText: 'Nome do Cliente'),
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Por favor, insira o nome do cliente';
@@ -103,7 +103,7 @@ class _RentFormScreenState extends State<RentFormScreen> {
                 ),
                 TextFormField(
                   initialValue: _vehicleModel,
-                  decoration: InputDecoration(labelText: 'Modelo do Veículo'),
+                  decoration: const InputDecoration(labelText: 'Modelo do Veículo'),
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Por favor, insira o modelo do veículo';
@@ -114,22 +114,22 @@ class _RentFormScreenState extends State<RentFormScreen> {
                     _vehicleModel = value!;
                   },
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Text("Data de Início: ${DateFormat('dd/MM/yyyy').format(_startDate)}"),
                 ElevatedButton(
                   onPressed: () => _selectDate(context, true),
-                  child: Text('Selecionar Data de Início'),
+                  child: const Text('Selecionar Data de Início'),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Text("Data de Término: ${DateFormat('dd/MM/yyyy').format(_endDate)}"),
                 ElevatedButton(
                   onPressed: () => _selectDate(context, false),
-                  child: Text('Selecionar Data de Término'),
+                  child: const Text('Selecionar Data de Término'),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 TextFormField(
                   initialValue: _totalAmount.toString(),
-                  decoration: InputDecoration(labelText: 'Valor Total'),
+                  decoration: const InputDecoration(labelText: 'Valor Total'),
                   keyboardType: TextInputType.number,
                   validator: (value) {
                     if (value!.isEmpty) {
@@ -145,10 +145,10 @@ class _RentFormScreenState extends State<RentFormScreen> {
                     _totalAmount = double.parse(value!);
                   },
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: _saveForm,
-                  child: Text('Salvar'),
+                  child: const Text('Salvar'),
                 ),
               ],
             ),

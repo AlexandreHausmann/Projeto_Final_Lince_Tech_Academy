@@ -1,5 +1,5 @@
 class Customer {
-  final int id;
+  final int? id;
   final String name;
   final String phone;
   final String cnpj;
@@ -7,7 +7,7 @@ class Customer {
   final String state;
 
   Customer({
-    required this.id,
+    this.id,
     required this.name,
     required this.phone,
     required this.cnpj,

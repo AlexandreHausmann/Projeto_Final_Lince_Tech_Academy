@@ -1,5 +1,5 @@
 class Vehicle {
-  final int id;
+  final int? id;
   final String brand;
   final String model;
   final String plate;
@@ -8,7 +8,7 @@ class Vehicle {
   final String imagePath;
 
   Vehicle({
-    required this.id,
+    this.id,
     required this.brand,
     required this.model,
     required this.plate,
@@ -29,7 +29,7 @@ class Vehicle {
     };
   }
 
-  static Vehicle fromMap(Map<String, dynamic> map) {
+  factory Vehicle.fromMap(Map<String, dynamic> map) {
     return Vehicle(
       id: map['id'],
       brand: map['brand'],

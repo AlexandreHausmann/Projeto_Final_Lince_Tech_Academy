@@ -51,3 +51,19 @@ daily 12/06
 implementei a parte de alugueis no banco tive que fazer o mesmo esquema de veiculos, database separadas 
 vou dar inicio agora as regras de negócio 
 sem duvidas 
+
+daily 13/06 
+estou fazendo algumas anotações de detalhes e para não esquecer, 
+para proxima parte que quero implementar é o dark mode 
+sem duvidas 
+
+//mudar os nomes para padrão dart/flutter 
+
+daily 14/06
+daily 15/06
+daily 16/06 
+
+daily 17/06
+fiz alterações e implementei o deletar cliente, gerente e veiculos 
+vou arrumar alguns bugs e continuar com as regras de negócio 
+sem duvidas 

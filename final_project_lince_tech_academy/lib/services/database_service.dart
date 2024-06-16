@@ -2,7 +2,6 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import '../models/customer.dart';
 import '../models/manager.dart';
-import '../models/rent.dart';
 
 class DatabaseService {
   static final DatabaseService instance = DatabaseService._init();
@@ -23,8 +22,8 @@ class DatabaseService {
     return await openDatabase(path, version: 1, onCreate: _createDB);
   }
 
-  Future _createDB(Database db, int version) async {
-    const customerTable = '''
+  Future<void> _createDB(Database db, int version) async {
+    await db.execute('''
       CREATE TABLE customers (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT,
@@ -33,9 +32,9 @@ class DatabaseService {
         city TEXT,
         state TEXT
       )
-    ''';
+    ''');
 
-    const managerTable = '''
+    await db.execute('''
       CREATE TABLE managers (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT,
@@ -44,13 +43,7 @@ class DatabaseService {
         phone TEXT,
         commissionPercentage REAL
       )
-    ''';
-
-    
-
-    await db.execute(customerTable);
-    await db.execute(managerTable);
- 
+    ''');
   }
 
   // Customer methods
@@ -66,6 +59,15 @@ class DatabaseService {
       customer.toMap(),
       where: 'id = ?',
       whereArgs: [customer.id],
+    );
+  }
+
+  Future<void> deleteCustomer(int customerId) async {
+    final db = await instance.database;
+    await db.delete(
+      'customers',
+      where: 'id = ?',
+      whereArgs: [customerId],
     );
   }
 
@@ -90,9 +92,17 @@ class DatabaseService {
     );
   }
 
+  Future<void> deleteManager(int managerId) async {
+    final db = await instance.database;
+    await db.delete(
+      'managers',
+      where: 'id = ?',
+      whereArgs: [managerId],
+    );
+  }
+
   Future<List<Map<String, dynamic>>> getAllManagers() async {
     final db = await instance.database;
     return await db.query('managers');
   }
-
 }

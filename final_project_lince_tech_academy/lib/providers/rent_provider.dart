@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/rent.dart';
-import '../services/rentDatabaseServices.dart';
+import '../services/rent_database_service.dart';
 
 class RentProvider with ChangeNotifier {
   List<Rent> _rents = [];
@@ -27,4 +27,6 @@ class RentProvider with ChangeNotifier {
       notifyListeners();
     }
   }
+
+  void cancelRent(int i) {}
 }

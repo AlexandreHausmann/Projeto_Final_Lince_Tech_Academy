@@ -1,5 +1,5 @@
 class Rent {
-  final int id;
+  final int? id;
   final String clientName;
   final String vehicleModel;
   final DateTime startDate;
@@ -8,7 +8,7 @@ class Rent {
   final double totalAmount;
 
   Rent({
-    required this.id,
+    this.id,
     required this.clientName,
     required this.vehicleModel,
     required this.startDate,
@@ -16,6 +16,8 @@ class Rent {
     required this.totalDays,
     required this.totalAmount,
   });
+
+  get customerName => null;
 
   Map<String, dynamic> toMap() {
     return {

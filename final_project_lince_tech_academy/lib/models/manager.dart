@@ -1,5 +1,5 @@
 class Manager {
-  final int id;
+  final int? id;
   final String name;
   final String cpf;
   final String state;
@@ -7,7 +7,7 @@ class Manager {
   final double commissionPercentage;
 
   Manager({
-    required this.id,
+    this.id,
     required this.name,
     required this.cpf,
     required this.state,
