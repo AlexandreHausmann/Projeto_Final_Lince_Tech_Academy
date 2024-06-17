@@ -2,31 +2,30 @@ import 'package:flutter/material.dart';
 import '../models/rent.dart';
 import '../services/rent_database_service.dart';
 
-class RentProvider with ChangeNotifier {
+class RentProvider extends ChangeNotifier {
+  final RentDatabaseService _dbService = RentDatabaseService.instance;
   List<Rent> _rents = [];
 
   List<Rent> get rents => _rents;
 
   Future<void> fetchRents() async {
-    final dataList = await RentDatabaseService.instance.getAllRents();
-    _rents = dataList.map((item) => Rent.fromMap(item)).toList();
+    final fetchedRents = await _dbService.getAllRents();
+    _rents = fetchedRents.map((e) => Rent.fromMap(e)).toList();
     notifyListeners();
   }
 
-  void addRent(Rent rent) async {
-    await RentDatabaseService.instance.insertRent(rent);
-    _rents.add(rent);
-    notifyListeners();
+  Future<void> addRent(Rent rent) async {
+    await _dbService.insertRent(rent);
+    await fetchRents(); // Atualiza a lista após adicionar
   }
 
-  void updateRent(Rent rent) async {
-    await RentDatabaseService.instance.updateRent(rent);
-    final index = _rents.indexWhere((r) => r.id == rent.id);
-    if (index != -1) {
-      _rents[index] = rent;
-      notifyListeners();
-    }
+  Future<void> updateRent(Rent rent) async {
+    await _dbService.updateRent(rent);
+    await fetchRents(); // Atualiza a lista após atualizar
   }
 
-  void cancelRent(int i) {}
+  Future<void> cancelRent(int id) async {
+    await _dbService.deleteRent(id);
+    await fetchRents(); // Atualiza a lista após cancelar
+  }
 }

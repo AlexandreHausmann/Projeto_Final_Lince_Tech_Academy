@@ -5,63 +5,82 @@ import '../models/customer.dart';
 import 'customer_form_screen.dart';
 
 class CustomerListScreen extends StatelessWidget {
-  const CustomerListScreen({Key? key}) : super(key: key);
+  const CustomerListScreen({Key? key});
 
   @override
   Widget build(BuildContext context) {
     final customerProvider = Provider.of<CustomerProvider>(context);
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      customerProvider.fetchCustomers();
+    });
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Lista de Clientes'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: () {
-              Navigator.of(context).pushNamed('/add_customer');
-            },
-          ),
-        ],
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).popUntil(ModalRoute.withName('/'));
+          },
+        ),
       ),
-      body: FutureBuilder(
-        future: customerProvider.fetchCustomers(),
-        builder: (ctx, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return const Center(child: Text('Ocorreu um erro ao carregar os clientes.'));
-          } else {
-            return Consumer<CustomerProvider>(
-              builder: (ctx, customerProvider, _) => ListView.builder(
-                itemCount: customerProvider.customers.length,
-                itemBuilder: (ctx, i) {
-                  Customer customer = customerProvider.customers[i];
-                  return ListTile(
-                    title: Text(customer.name),
-                    subtitle: Text(customer.phone),
-                    onTap: () {
-                      Navigator.of(context).pushNamed('/add_customer', arguments: customer);
-                    },
-                    trailing: IconButton(
-                      icon: const Icon(Icons.delete),
-                      onPressed: () {
-                        showDialog(
-                          context: context,
-                          builder: (ctx) => AlertDialog(
-                            title: const Text('Confirmar exclusão'),
-                            content: const Text('Deseja realmente excluir este cliente?'),
-                            actions: [
-                              TextButton(
-                                child: const Text('Cancelar'),
+      body: Consumer<CustomerProvider>(
+        builder: (ctx, customerProvider, _) => customerProvider.customers.isEmpty
+            ? const Center(child: CircularProgressIndicator())
+            : Column(
+                children: [
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: customerProvider.customers.length,
+                      itemBuilder: (ctx, i) {
+                        Customer customer = customerProvider.customers[i];
+                        return ListTile(
+                          title: Text(customer.name),
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => CustomerFormScreen(customer: customer),
+                              ),
+                            );
+                          },
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                icon: Icon(Icons.edit),
                                 onPressed: () {
-                                  Navigator.of(ctx).pop();
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (_) => CustomerFormScreen(customer: customer),
+                                    ),
+                                  );
                                 },
                               ),
-                              TextButton(
-                                child: const Text('Excluir'),
+                              IconButton(
+                                icon: Icon(Icons.delete),
                                 onPressed: () {
-                                  customerProvider.deleteCustomer(customer.id!);
-                                  Navigator.of(ctx).pop();
+                                  showDialog(
+                                    context: context,
+                                    builder: (ctx) => AlertDialog(
+                                      title: const Text('Confirmar exclusão'),
+                                      content: const Text('Deseja realmente excluir este cliente?'),
+                                      actions: [
+                                        TextButton(
+                                          child: const Text('Cancelar'),
+                                          onPressed: () {
+                                            Navigator.of(ctx).pop();
+                                          },
+                                        ),
+                                        TextButton(
+                                          child: const Text('Excluir'),
+                                          onPressed: () {
+                                            customerProvider.deleteCustomer(customer.id!);
+                                            Navigator.of(ctx).pop();
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  );
                                 },
                               ),
                             ],
@@ -69,12 +88,24 @@ class CustomerListScreen extends StatelessWidget {
                         );
                       },
                     ),
-                  );
-                },
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (_) => const CustomerFormScreen()),
+                        ).then((_) {
+                          // After navigating back from adding a new customer, fetch updated list
+                          customerProvider.fetchCustomers();
+                        });
+                      },
+                      child: const Text('Adicionar Cliente'),
+                    ),
+                  ),
+                ],
               ),
-            );
-          }
-        },
       ),
     );
   }

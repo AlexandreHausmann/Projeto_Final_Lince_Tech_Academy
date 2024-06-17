@@ -66,14 +66,8 @@ class _VehicleFormScreenState extends State<VehicleFormScreen> {
       } else {
         Provider.of<VehicleProvider>(context, listen: false).updateVehicle(newVehicle);
       }
-      Navigator.pop(context);
-    }
-  }
-
-  void _deleteVehicle(BuildContext context) {
-    if (widget.vehicle != null) {
-      Provider.of<VehicleProvider>(context, listen: false).deleteVehicle(widget.vehicle!.id!);
-      Navigator.of(context).pop();
+      Navigator.pop(context); // Fecha a tela de adição
+      Navigator.pushNamed(context, '/vehicles'); // Navega para a lista de veículos
     }
   }
 
@@ -82,33 +76,6 @@ class _VehicleFormScreenState extends State<VehicleFormScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.vehicle == null ? 'Novo Veículo' : 'Editar Veículo'),
-        actions: [
-          if (widget.vehicle != null)
-            IconButton(
-              icon: const Icon(Icons.delete),
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (ctx) => AlertDialog(
-                    title:const Text('Confirmar exclusão'),
-                    content:const Text('Deseja realmente excluir este veículo?'),
-                    actions: [
-                      TextButton(
-                        child:const Text('Cancelar'),
-                        onPressed: () {
-                          Navigator.of(ctx).pop();
-                        },
-                      ),
-                      TextButton(
-                        child:const Text('Excluir'),
-                        onPressed: () => _deleteVehicle(context),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
-        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -120,7 +87,7 @@ class _VehicleFormScreenState extends State<VehicleFormScreen> {
               children: <Widget>[
                 TextFormField(
                   initialValue: _brand,
-                  decoration:const InputDecoration(labelText: 'Marca'),
+                  decoration: InputDecoration(labelText: 'Marca'),
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Por favor, insira a marca';
@@ -133,7 +100,7 @@ class _VehicleFormScreenState extends State<VehicleFormScreen> {
                 ),
                 TextFormField(
                   initialValue: _model,
-                  decoration:const InputDecoration(labelText: 'Modelo'),
+                  decoration: InputDecoration(labelText: 'Modelo'),
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Por favor, insira o modelo';
@@ -146,7 +113,7 @@ class _VehicleFormScreenState extends State<VehicleFormScreen> {
                 ),
                 TextFormField(
                   initialValue: _plate,
-                  decoration:const InputDecoration(labelText: 'Placa'),
+                  decoration: InputDecoration(labelText: 'Placa'),
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Por favor, insira a placa';
@@ -159,7 +126,7 @@ class _VehicleFormScreenState extends State<VehicleFormScreen> {
                 ),
                 TextFormField(
                   initialValue: _year.toString(),
-                  decoration:const InputDecoration(labelText: 'Ano de Fabricação'),
+                  decoration: InputDecoration(labelText: 'Ano de Fabricação'),
                   keyboardType: TextInputType.number,
                   validator: (value) {
                     if (value!.isEmpty) {
@@ -177,7 +144,7 @@ class _VehicleFormScreenState extends State<VehicleFormScreen> {
                 ),
                 TextFormField(
                   initialValue: _dailyRate.toString(),
-                  decoration:const InputDecoration(labelText: 'Custo da Diária de Aluguel'),
+                  decoration: InputDecoration(labelText: 'Custo da Diária de Aluguel'),
                   keyboardType: TextInputType.number,
                   validator: (value) {
                     if (value!.isEmpty) {
@@ -208,15 +175,15 @@ class _VehicleFormScreenState extends State<VehicleFormScreen> {
                             height: 200,
                             fit: BoxFit.cover,
                           )
-                        :const SizedBox.shrink(),
+                        : SizedBox.shrink(),
                 ElevatedButton(
                   onPressed: _pickImage,
-                  child:const Text('Selecionar Imagem'),
+                  child: Text('Selecionar Imagem'),
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: _saveForm,
-                  child:const Text('Salvar'),
+                  child: Text(widget.vehicle == null ? 'Salvar' : 'Atualizar'),
                 ),
               ],
             ),

@@ -1,47 +1,45 @@
-import 'package:flutter/material.dart';
-import '../services/database_service.dart';
-import '../models/customer.dart';
+// customer_provider.dart
 
-class CustomerProvider with ChangeNotifier {
+import 'package:flutter/material.dart';
+import '../models/customer.dart';
+import '../services/customer_database_service.dart';
+
+class CustomerProvider extends ChangeNotifier {
+  final DatabaseService _dbService = DatabaseService.instance;
   List<Customer> _customers = [];
 
-  List<Customer> get customers => [..._customers];
+  List<Customer> get customers => _customers;
 
-  Future<void> fetchCustomers() async {
-    try {
-      final customers = await DatabaseService.instance.getAllCustomers();
-      _customers = customers.map((item) => Customer.fromMap(item)).toList();
+  void fetchCustomers() {
+    _dbService.getAllCustomers().then((fetchedCustomers) {
+      _customers = fetchedCustomers.map((e) => Customer.fromMap(e)).toList();
       notifyListeners();
-    } catch (error) {
-      rethrow;
-    }
+    }).catchError((error) {
+      print('Error fetching customers: $error');
+    });
   }
 
-  Future<void> addCustomer(Customer customer) async {
-    try {
-      await DatabaseService.instance.insertCustomer(customer);
-      await fetchCustomers();
-    } catch (error) {
-      rethrow;
-    }
+  void addCustomer(Customer customer) {
+    _dbService.insertCustomer(customer).then((_) {
+      fetchCustomers(); // Atualiza a lista após adicionar
+    }).catchError((error) {
+      print('Error adding customer: $error');
+    });
   }
 
-  Future<void> updateCustomer(Customer customer) async {
-    try {
-      await DatabaseService.instance.updateCustomer(customer);
-      await fetchCustomers();
-    } catch (error) {
-      rethrow;
-    }
+  void updateCustomer(Customer customer) {
+    _dbService.updateCustomer(customer).then((_) {
+      fetchCustomers(); // Atualiza a lista após atualizar
+    }).catchError((error) {
+      print('Error updating customer: $error');
+    });
   }
 
-  Future<void> deleteCustomer(int id) async {
-    try {
-      await DatabaseService.instance.deleteCustomer(id);
-      _customers.removeWhere((customer) => customer.id == id);
-      notifyListeners();
-    } catch (error) {
-      rethrow;
-    }
+  void deleteCustomer(int id) {
+    _dbService.deleteCustomer(id).then((_) {
+      fetchCustomers(); // Atualiza a lista após excluir
+    }).catchError((error) {
+      print('Error deleting customer: $error');
+    });
   }
 }

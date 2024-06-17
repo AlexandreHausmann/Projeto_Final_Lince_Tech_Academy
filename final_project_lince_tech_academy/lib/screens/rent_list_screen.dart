@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/rent_provider.dart';
 import '../models/rent.dart';
-import 'rent_form_screen.dart';
 
 class RentListScreen extends StatelessWidget {
-  const RentListScreen({Key? key}) : super(key: key);
+  const RentListScreen({Key? key});
 
   @override
   Widget build(BuildContext context) {
@@ -36,38 +35,44 @@ class RentListScreen extends StatelessWidget {
                 itemCount: rentProvider.rents.length,
                 itemBuilder: (ctx, i) {
                   Rent rent = rentProvider.rents[i];
-                  return ListTile(
-                    title: Text('ID do Aluguel: ${rent.id}'),
-                    subtitle: Text('Cliente: ${rent.customerName}\nVeículo: ${rent.vehicleModel}'),
-                    onTap: () {
-                      Navigator.of(context).pushNamed('/add_rent', arguments: rent);
+                  return Dismissible(
+                    key: UniqueKey(),
+                    direction: DismissDirection.endToStart,
+                    background: Container(
+                      color: Colors.red,
+                      alignment: Alignment.centerRight,
+                      padding: const EdgeInsets.only(right: 20),
+                      child: const Icon(Icons.delete, color: Colors.white),
+                    ),
+                    confirmDismiss: (direction) async {
+                      return await showDialog(
+                        context: context,
+                        builder: (ctx) => AlertDialog(
+                          title: const Text('Confirmar exclusão'),
+                          content: const Text('Deseja realmente excluir este aluguel?'),
+                          actions: [
+                            TextButton(
+                              child: const Text('Cancelar'),
+                              onPressed: () => Navigator.of(ctx).pop(false),
+                            ),
+                            TextButton(
+                              child: const Text('Excluir'),
+                              onPressed: () => Navigator.of(ctx).pop(true),
+                            ),
+                          ],
+                        ),
+                      );
                     },
-                    trailing: IconButton(
-                      icon: const Icon(Icons.delete),
-                      onPressed: () {
-                        showDialog(
-                          context: context,
-                          builder: (ctx) => AlertDialog(
-                            title: const Text('Confirmar exclusão'),
-                            content: const Text('Deseja realmente cancelar este aluguel?'),
-                            actions: [
-                              TextButton(
-                                child: const Text('Cancelar'),
-                                onPressed: () {
-                                  Navigator.of(ctx).pop();
-                                },
-                              ),
-                              TextButton(
-                                child: const Text('Cancelar Aluguel'),
-                                onPressed: () {
-                                  rentProvider.cancelRent(rent.id!);
-                                  Navigator.of(ctx).pop();
-                                },
-                              ),
-                            ],
-                          ),
-                        );
+                    onDismissed: (direction) {
+                      rentProvider.cancelRent(rent.id!);
+                    },
+                    child: ListTile(
+                      title: Text('Aluguel ${rent.id}'),
+                      subtitle: Text('Cliente: ${rent.customerName} - Veículo: ${rent.vehicleModel}'),
+                      onTap: () {
+                        Navigator.of(context).pushNamed('/add_rent', arguments: rent);
                       },
+                      trailing: const Icon(Icons.arrow_forward),
                     ),
                   );
                 },

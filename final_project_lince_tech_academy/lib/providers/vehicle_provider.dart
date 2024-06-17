@@ -2,34 +2,30 @@ import 'package:flutter/material.dart';
 import '../models/vehicle.dart';
 import '../services/vehicle_database_service.dart';
 
-class VehicleProvider with ChangeNotifier {
+class VehicleProvider extends ChangeNotifier {
+  final VehicleDatabaseService _dbService = VehicleDatabaseService.instance;
   List<Vehicle> _vehicles = [];
 
   List<Vehicle> get vehicles => _vehicles;
 
   Future<void> fetchVehicles() async {
-    final vehicleDBService = VehicleDatabaseService.instance;
-    final dataList = await vehicleDBService.getAllVehicles();
-    _vehicles = dataList.map((item) => Vehicle.fromMap(item)).toList();
+    final fetchedVehicles = await _dbService.getAllVehicles();
+    _vehicles = fetchedVehicles.map((e) => Vehicle.fromMap(e)).toList();
     notifyListeners();
   }
 
   Future<void> addVehicle(Vehicle vehicle) async {
-    final vehicleDBService = VehicleDatabaseService.instance;
-    await vehicleDBService.insertVehicle(vehicle);
-    await fetchVehicles();
+    await _dbService.insertVehicle(vehicle);
+    await fetchVehicles(); // Atualiza a lista após adicionar
   }
 
   Future<void> updateVehicle(Vehicle vehicle) async {
-    final vehicleDBService = VehicleDatabaseService.instance;
-    await vehicleDBService.updateVehicle(vehicle);
-    await fetchVehicles();
+    await _dbService.updateVehicle(vehicle);
+    await fetchVehicles(); // Atualiza a lista após atualizar
   }
 
   Future<void> deleteVehicle(int id) async {
-    final vehicleDBService = VehicleDatabaseService.instance;
-    await vehicleDBService.deleteVehicle(id);
-    await fetchVehicles();
+    await _dbService.deleteVehicle(id);
+    await fetchVehicles(); // Atualiza a lista após excluir
   }
-
 }

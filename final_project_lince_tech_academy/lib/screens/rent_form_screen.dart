@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../models/rent.dart';
-import '../providers/rent_provider.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import '../providers/rent_provider.dart';
+import '../models/rent.dart';
 
 class RentFormScreen extends StatefulWidget {
   final Rent? rent;
 
-  const RentFormScreen({super.key, this.rent});
+  const RentFormScreen({Key? key, this.rent}) : super(key: key);
 
   @override
   _RentFormScreenState createState() => _RentFormScreenState();
@@ -33,25 +33,6 @@ class _RentFormScreenState extends State<RentFormScreen> {
     _totalAmount = widget.rent?.totalAmount ?? 0.0;
   }
 
-  Future<void> _selectDate(BuildContext context, bool isStartDate) async {
-    final DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: isStartDate ? _startDate : _endDate,
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2101),
-    );
-    if (pickedDate != null) {
-      setState(() {
-        if (isStartDate) {
-          _startDate = pickedDate;
-        } else {
-          _endDate = pickedDate;
-        }
-        _totalDays = _endDate.difference(_startDate).inDays;
-      });
-    }
-  }
-
   void _saveForm() {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
@@ -70,7 +51,36 @@ class _RentFormScreenState extends State<RentFormScreen> {
       } else {
         Provider.of<RentProvider>(context, listen: false).updateRent(newRent);
       }
-      Navigator.pop(context);
+      Navigator.pop(context); // Fecha a tela de adição
+      Navigator.pushNamed(context, '/rents'); // Navega para a lista de aluguéis
+    }
+  }
+
+  Future<void> _selectStartDate(BuildContext context) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: _startDate,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
+    if (pickedDate != null) {
+      setState(() {
+        _startDate = pickedDate;
+      });
+    }
+  }
+
+  Future<void> _selectEndDate(BuildContext context) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: _endDate,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
+    if (pickedDate != null) {
+      setState(() {
+        _endDate = pickedDate;
+      });
     }
   }
 
@@ -90,7 +100,7 @@ class _RentFormScreenState extends State<RentFormScreen> {
               children: <Widget>[
                 TextFormField(
                   initialValue: _clientName,
-                  decoration: const InputDecoration(labelText: 'Nome do Cliente'),
+                  decoration: InputDecoration(labelText: 'Nome do Cliente'),
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Por favor, insira o nome do cliente';
@@ -103,7 +113,7 @@ class _RentFormScreenState extends State<RentFormScreen> {
                 ),
                 TextFormField(
                   initialValue: _vehicleModel,
-                  decoration: const InputDecoration(labelText: 'Modelo do Veículo'),
+                  decoration: InputDecoration(labelText: 'Modelo do Veículo'),
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Por favor, insira o modelo do veículo';
@@ -114,23 +124,61 @@ class _RentFormScreenState extends State<RentFormScreen> {
                     _vehicleModel = value!;
                   },
                 ),
-                const SizedBox(height: 20),
-                Text("Data de Início: ${DateFormat('dd/MM/yyyy').format(_startDate)}"),
-                ElevatedButton(
-                  onPressed: () => _selectDate(context, true),
-                  child: const Text('Selecionar Data de Início'),
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: TextFormField(
+                        initialValue: DateFormat('dd/MM/yyyy').format(_startDate),
+                        decoration: InputDecoration(labelText: 'Data de Início'),
+                        readOnly: true,
+                        onTap: () => _selectStartDate(context),
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Por favor, insira a data de início';
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: TextFormField(
+                        initialValue: DateFormat('dd/MM/yyyy').format(_endDate),
+                        decoration: InputDecoration(labelText: 'Data de Término'),
+                        readOnly: true,
+                        onTap: () => _selectEndDate(context),
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Por favor, insira a data de término';
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 20),
-                Text("Data de Término: ${DateFormat('dd/MM/yyyy').format(_endDate)}"),
-                ElevatedButton(
-                  onPressed: () => _selectDate(context, false),
-                  child: const Text('Selecionar Data de Término'),
+                TextFormField(
+                  initialValue: _totalDays.toString(),
+                  decoration: InputDecoration(labelText: 'Total de Dias'),
+                  keyboardType: TextInputType.number,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Por favor, insira o total de dias';
+                    }
+                    final totalDays = int.tryParse(value);
+                    if (totalDays == null || totalDays <= 0) {
+                      return 'Por favor, insira um valor válido';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) {
+                    _totalDays = int.parse(value!);
+                  },
                 ),
-                const SizedBox(height: 20),
                 TextFormField(
                   initialValue: _totalAmount.toString(),
-                  decoration: const InputDecoration(labelText: 'Valor Total'),
-                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(labelText: 'Valor Total'),
+                  keyboardType: TextInputType.numberWithOptions(decimal: true),
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Por favor, insira o valor total';
@@ -148,7 +196,7 @@ class _RentFormScreenState extends State<RentFormScreen> {
                 const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: _saveForm,
-                  child: const Text('Salvar'),
+                  child: Text(widget.rent == null ? 'Salvar' : 'Atualizar'),
                 ),
               ],
             ),

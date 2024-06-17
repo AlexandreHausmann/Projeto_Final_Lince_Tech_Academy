@@ -14,61 +14,40 @@ class ManagerFormScreen extends StatefulWidget {
 
 class _ManagerFormScreenState extends State<ManagerFormScreen> {
   final _formKey = GlobalKey<FormState>();
-
-  late TextEditingController _nameController;
-  late TextEditingController _cpfController;
-  late TextEditingController _stateController;
-  late TextEditingController _phoneController;
-  late TextEditingController _commissionController;
+  late String _name;
+  late String _cpf;
+  late String _state;
+  late String _phone;
+  late double _commissionPercentage;
 
   @override
   void initState() {
     super.initState();
-    _nameController = TextEditingController(text: widget.manager?.name ?? '');
-    _cpfController = TextEditingController(text: widget.manager?.cpf ?? '');
-    _stateController = TextEditingController(text: widget.manager?.state ?? '');
-    _phoneController = TextEditingController(text: widget.manager?.phone ?? '');
-    _commissionController = TextEditingController(text: widget.manager?.commissionPercentage?.toString() ?? '');
-  }
-
-  @override
-  void dispose() {
-    _nameController.dispose();
-    _cpfController.dispose();
-    _stateController.dispose();
-    _phoneController.dispose();
-    _commissionController.dispose();
-    super.dispose();
+    _name = widget.manager?.name ?? '';
+    _cpf = widget.manager?.cpf ?? '';
+    _state = widget.manager?.state ?? '';
+    _phone = widget.manager?.phone ?? '';
+    _commissionPercentage = widget.manager?.commissionPercentage ?? 0.0;
   }
 
   void _saveForm(BuildContext context) {
-    final isValid = _formKey.currentState?.validate();
-    if (!isValid!) {
-      return;
-    }
-    
-    final newManager = Manager(
-      id: widget.manager?.id,
-      name: _nameController.text.trim(),
-      cpf: _cpfController.text.trim(),
-      state: _stateController.text.trim(),
-      phone: _phoneController.text.trim(),
-      commissionPercentage: double.tryParse(_commissionController.text.trim()) ?? 0.0,
-    );
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+      final newManager = Manager(
+        id: widget.manager?.id ?? DateTime.now().millisecondsSinceEpoch,
+        name: _name,
+        cpf: _cpf,
+        state: _state,
+        phone: _phone,
+        commissionPercentage: _commissionPercentage,
+      );
 
-    if (widget.manager == null) {
-      Provider.of<ManagerProvider>(context, listen: false).addManager(newManager);
-    } else {
-      Provider.of<ManagerProvider>(context, listen: false).updateManager(newManager);
-    }
-
-    Navigator.of(context).pop();
-  }
-
-  void _deleteManager(BuildContext context) {
-    if (widget.manager != null) {
-      Provider.of<ManagerProvider>(context, listen: false).deleteManager(widget.manager!.id!);
-      Navigator.of(context).pop();
+      if (widget.manager == null) {
+        Provider.of<ManagerProvider>(context, listen: false).addManager(newManager);
+      } else {
+        Provider.of<ManagerProvider>(context, listen: false).updateManager(newManager);
+      }
+      Navigator.pop(context); // Fecha a tela de adição
     }
   }
 
@@ -76,80 +55,95 @@ class _ManagerFormScreenState extends State<ManagerFormScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.manager == null ? 'Adicionar Gerente' : 'Editar Gerente'),
-        actions: [
-          if (widget.manager != null)
-            IconButton(
-              icon: const Icon(Icons.delete),
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (ctx) => AlertDialog(
-                    title: const Text('Confirmar exclusão'),
-                    content: Text('Deseja realmente excluir ${widget.manager!.name}?'),
-                    actions: [
-                      TextButton(
-                        child: const Text('Cancelar'),
-                        onPressed: () {
-                          Navigator.of(ctx).pop();
-                        },
-                      ),
-                      TextButton(
-                        child: const Text('Excluir'),
-                        onPressed: () => _deleteManager(context),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
-        ],
+        title: Text(widget.manager == null ? 'Novo Gerente' : 'Editar Gerente'),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
-          child: ListView(
-            children: [
-              TextFormField(
-                controller: _nameController,
-                decoration: const InputDecoration(labelText: 'Nome'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Por favor, entre com um nome.';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _cpfController,
-                decoration: const InputDecoration(labelText: 'CPF'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Por favor, entre com um CPF.';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _stateController,
-                decoration: const InputDecoration(labelText: 'Estado'),
-              ),
-              TextFormField(
-                controller: _phoneController,
-                decoration: const InputDecoration(labelText: 'Telefone'),
-              ),
-              TextFormField(
-                controller: _commissionController,
-                decoration: const InputDecoration(labelText: 'Percentual de Comissão'),
-                keyboardType: TextInputType.number,
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () => _saveForm(context),
-                child: const Text('Salvar'),
-              ),
-            ],
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                TextFormField(
+                  initialValue: _name,
+                  decoration: InputDecoration(labelText: 'Nome'),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Por favor, insira o nome';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) {
+                    _name = value!;
+                  },
+                ),
+                TextFormField(
+                  initialValue: _cpf,
+                  decoration: InputDecoration(labelText: 'CPF'),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Por favor, insira o CPF';
+                    }
+                    // Adicione validações adicionais para CPF se necessário
+                    return null;
+                  },
+                  onSaved: (value) {
+                    _cpf = value!;
+                  },
+                ),
+                TextFormField(
+                  initialValue: _state,
+                  decoration: InputDecoration(labelText: 'Estado'),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Por favor, insira o estado';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) {
+                    _state = value!;
+                  },
+                ),
+                TextFormField(
+                  initialValue: _phone,
+                  decoration: InputDecoration(labelText: 'Telefone'),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Por favor, insira o telefone';
+                    }
+                    // Adicione validações adicionais para telefone se necessário
+                    return null;
+                  },
+                  onSaved: (value) {
+                    _phone = value!;
+                  },
+                ),
+                TextFormField(
+                  initialValue: _commissionPercentage.toString(),
+                  decoration: InputDecoration(labelText: 'Porcentagem de Comissão'),
+                  keyboardType: TextInputType.numberWithOptions(decimal: true),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Por favor, insira a porcentagem de comissão';
+                    }
+                    final commission = double.tryParse(value);
+                    if (commission == null || commission < 0 || commission > 100) {
+                      return 'Por favor, insira um valor válido entre 0 e 100';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) {
+                    _commissionPercentage = double.parse(value!);
+                  },
+                ),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () => _saveForm(context),
+                  child: Text(widget.manager == null ? 'Salvar' : 'Atualizar'),
+                ),
+              ],
+            ),
           ),
         ),
       ),

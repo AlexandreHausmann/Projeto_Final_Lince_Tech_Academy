@@ -64,6 +64,11 @@ daily 15/06
 daily 16/06 
 
 daily 17/06
-fiz alterações e implementei o deletar cliente, gerente e veiculos 
-vou arrumar alguns bugs e continuar com as regras de negócio 
+para o fim de semana fiz alterações e implementei o deletar cliente, gerente e veiculos 
+pra hoje de manha arrumei alguns problemas no meu banco de dados pro cliente e pro gerente adicionei algumas 
+regras de negócio 
+pra essa tarde quero dar continuidade no thema e adicionar algumas regras de negócio tambem 
 sem duvidas 
+
+//coisas para se fazer, ver lista de veiculos, lista de alugueis, ver o thema 
+adicionar api, ver pdf 

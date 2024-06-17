@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/vehicle_provider.dart';
 import '../models/vehicle.dart';
-import 'vehicle_form_screen.dart';
 
 class VehicleListScreen extends StatelessWidget {
-  const VehicleListScreen({Key? key}) : super(key: key);
+  const VehicleListScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

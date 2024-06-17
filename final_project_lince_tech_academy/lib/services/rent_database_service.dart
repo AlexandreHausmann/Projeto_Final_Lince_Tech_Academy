@@ -56,4 +56,6 @@ class RentDatabaseService {
     final db = await instance.database;
     return await db.query('rents');
   }
+
+  deleteRent(int id) {}
 }

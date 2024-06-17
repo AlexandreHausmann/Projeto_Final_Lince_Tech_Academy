@@ -1,38 +1,43 @@
 import 'package:flutter/material.dart';
 import '../models/manager.dart';
-import '../services/database_service.dart';
+import '../services/manager_database_service.dart';
 
-class ManagerProvider with ChangeNotifier {
+class ManagerProvider extends ChangeNotifier {
+  final ManagerDatabaseService _dbService = ManagerDatabaseService.instance;
   List<Manager> _managers = [];
 
   List<Manager> get managers => _managers;
 
-  ManagerProvider() {
-    fetchManagers();
+  void fetchManagers() {
+    _dbService.getAllManagers().then((fetchedManagers) {
+      _managers = fetchedManagers.map((e) => Manager.fromMap(e)).toList();
+      notifyListeners();
+    }).catchError((error) {
+      print('Error fetching managers: $error');
+    });
   }
 
-  Future<void> fetchManagers() async {
-    final dbService = DatabaseService.instance;
-    final dataList = await dbService.getAllManagers();
-    _managers = dataList.map((item) => Manager.fromMap(item)).toList();
-    notifyListeners();
+  void addManager(Manager manager) {
+    _dbService.insertManager(manager).then((_) {
+      fetchManagers(); // Atualiza a lista após adicionar
+    }).catchError((error) {
+      print('Error adding manager: $error');
+    });
   }
 
-  Future<void> addManager(Manager manager) async {
-    final dbService = DatabaseService.instance;
-    await dbService.insertManager(manager);
-    await fetchManagers();
+  void updateManager(Manager manager) {
+    _dbService.updateManager(manager).then((_) {
+      fetchManagers(); // Atualiza a lista após atualizar
+    }).catchError((error) {
+      print('Error updating manager: $error');
+    });
   }
 
-  Future<void> updateManager(Manager manager) async {
-    final dbService = DatabaseService.instance;
-    await dbService.updateManager(manager);
-    await fetchManagers();
-  }
-
-  Future<void> deleteManager(int id) async {
-    final dbService = DatabaseService.instance;
-    await dbService.deleteManager(id);
-    await fetchManagers();
+  void deleteManager(int id) {
+    _dbService.deleteManager(id).then((_) {
+      fetchManagers(); // Atualiza a lista após excluir
+    }).catchError((error) {
+      print('Error deleting manager: $error');
+    });
   }
 }
