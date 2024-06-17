@@ -64,10 +64,11 @@ daily 15/06
 daily 16/06 
 
 daily 17/06
-para o fim de semana fiz alterações e implementei o deletar cliente, gerente e veiculos 
+para o fim de semana fiz alterações e implementei o icone de deletar cliente, gerente e veiculos e isso me 
+custou bastante tempo pq eu tive que rever algumas coisas nos providers 
 pra hoje de manha arrumei alguns problemas no meu banco de dados pro cliente e pro gerente adicionei algumas 
 regras de negócio 
-pra essa tarde quero dar continuidade no thema e adicionar algumas regras de negócio tambem 
+pra essa tarde quero dar continuidade com o banco de dados de veiculos, eu ja vou ver pra adicionar a api
 sem duvidas 
 
 //coisas para se fazer, ver lista de veiculos, lista de alugueis, ver o thema 
