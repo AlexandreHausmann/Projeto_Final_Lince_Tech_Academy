@@ -33,47 +33,51 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => RentProvider()),
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
       ],
-      child: MaterialApp(
-        initialRoute: '/',
-        routes: {
-          '/': (context) => const HomeScreen(),
-          '/settings': (context) => const SettingsScreen(),
-          '/customers': (context) => const CustomerListScreen(),
-          '/add_customer': (context) => const CustomerFormScreen(),
-          '/managers': (context) =>  ManagerListScreen(),
-          '/add_manager': (context) => const ManagerFormScreen(),
-          '/vehicles': (context) => const VehicleListScreen(),
-          '/add_vehicle': (context) => const VehicleFormScreen(),
-          '/rents': (context) => const RentListScreen(),
-          '/add_rent': (context) => const RentFormScreen(),
+      child: Consumer<ThemeProvider>(
+        builder: (context, themeProvider, child) {
+          return MaterialApp(
+            initialRoute: '/',
+            routes: {
+              '/': (context) => const HomeScreen(),
+              '/settings': (context) => const SettingsScreen(),
+              '/customers': (context) => const CustomerListScreen(),
+              '/add_customer': (context) => const CustomerFormScreen(),
+              '/managers': (context) => const ManagerListScreen(),
+              '/add_manager': (context) => const ManagerFormScreen(),
+              '/vehicles': (context) => const VehicleListScreen(),
+              '/add_vehicle': (context) => const VehicleFormScreen(),
+              '/rents': (context) => const RentListScreen(),
+              '/add_rent': (context) => const RentFormScreen(),
+            },
+            title: 'SS Automóveis',
+            theme: ThemeData.light().copyWith(
+              primaryColor: Colors.blue,
+              appBarTheme: const AppBarTheme(
+                backgroundColor: Colors.blue,
+              ),
+              elevatedButtonTheme: ElevatedButtonThemeData(
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: const Color.fromARGB(255, 63, 63, 63),
+                  backgroundColor: Colors.blue,
+                ),
+              ),
+            ),
+            darkTheme: ThemeData.dark().copyWith(
+              primaryColor: const Color.fromARGB(255, 63, 63, 63),
+              scaffoldBackgroundColor: const Color.fromARGB(255, 63, 63, 63),
+              appBarTheme: const AppBarTheme(
+                backgroundColor: Color.fromARGB(255, 63, 63, 63),
+              ),
+              elevatedButtonTheme: ElevatedButtonThemeData(
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: Colors.grey,
+                ),
+              ),
+            ),
+            themeMode: themeProvider.themeMode,
+          );
         },
-        title: 'SS Automóveis',
-        theme: ThemeData.light().copyWith(
-          primaryColor: Colors.blue,
-          appBarTheme: const AppBarTheme(
-            backgroundColor: Colors.blue,
-          ),
-          elevatedButtonTheme: ElevatedButtonThemeData(
-            style: ElevatedButton.styleFrom(
-              foregroundColor: const Color.fromARGB(255, 63, 63, 63),
-              backgroundColor: Colors.blue,
-            ),
-          ),
-        ),
-        darkTheme: ThemeData.dark().copyWith(
-          primaryColor: const Color.fromARGB(255, 63, 63, 63),
-          scaffoldBackgroundColor: const Color.fromARGB(255, 63, 63, 63),
-          appBarTheme: const AppBarTheme(
-            backgroundColor: Color.fromARGB(255, 63, 63, 63),
-          ),
-          elevatedButtonTheme: ElevatedButtonThemeData(
-            style: ElevatedButton.styleFrom(
-              foregroundColor: Colors.white,
-              backgroundColor: Colors.grey,
-            ),
-          ),
-        ),
-        themeMode: ThemeMode.system,
       ),
     );
   }

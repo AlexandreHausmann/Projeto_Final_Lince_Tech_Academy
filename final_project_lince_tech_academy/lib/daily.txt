@@ -73,3 +73,9 @@ sem duvidas
 
 //coisas para se fazer, ver lista de veiculos, lista de alugueis, ver o thema 
 adicionar api, ver pdf 
+
+daily 18/06
+aconteceu algo que me tomou tempo, mas foi um bug de IDE, basicamente os icones
+ e a logo ficaram bugados com uma imagem de erro tentei configurar o pubSpec de novo,
+ tentei alguns comando no terminal, por fim reiniciei a IDE e deu tudo cert ovoltou ao normal 
+ 
