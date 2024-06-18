@@ -51,8 +51,8 @@ class _RentFormScreenState extends State<RentFormScreen> {
       } else {
         Provider.of<RentProvider>(context, listen: false).updateRent(newRent);
       }
-      Navigator.pop(context); // Fecha a tela de adição
-      Navigator.pushNamed(context, '/rents'); // Navega para a lista de aluguéis
+      Navigator.pop(context);
+      Navigator.pushNamed(context, '/rents');
     }
   }
 

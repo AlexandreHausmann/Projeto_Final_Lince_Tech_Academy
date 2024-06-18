@@ -66,8 +66,8 @@ class _VehicleFormScreenState extends State<VehicleFormScreen> {
       } else {
         Provider.of<VehicleProvider>(context, listen: false).updateVehicle(newVehicle);
       }
-      Navigator.pop(context); // Fecha a tela de adição
-      Navigator.pushNamed(context, '/vehicles'); // Navega para a lista de veículos
+      Navigator.pop(context);
+      Navigator.pushNamed(context, '/vehicles'); 
     }
   }
 

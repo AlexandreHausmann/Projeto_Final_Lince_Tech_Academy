@@ -16,16 +16,16 @@ class RentProvider extends ChangeNotifier {
 
   Future<void> addRent(Rent rent) async {
     await _dbService.insertRent(rent);
-    await fetchRents(); // Atualiza a lista após adicionar
+    await fetchRents();
   }
 
   Future<void> updateRent(Rent rent) async {
     await _dbService.updateRent(rent);
-    await fetchRents(); // Atualiza a lista após atualizar
+    await fetchRents();
   }
 
   Future<void> cancelRent(int id) async {
     await _dbService.deleteRent(id);
-    await fetchRents(); // Atualiza a lista após cancelar
+    await fetchRents();
   }
 }

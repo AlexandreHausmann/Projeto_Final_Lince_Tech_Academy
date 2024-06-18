@@ -11,7 +11,7 @@ class ManagerListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final managerProvider = Provider.of<ManagerProvider>(context);
     WidgetsBinding.instance!.addPostFrameCallback((_) {
-      managerProvider.fetchManagers(); // Carregar a lista de gerentes ao abrir a tela
+      managerProvider.fetchManagers();
     });
 
     return Scaffold(

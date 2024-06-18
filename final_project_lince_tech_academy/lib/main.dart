@@ -57,7 +57,7 @@ class MyApp extends StatelessWidget {
               ),
               elevatedButtonTheme: ElevatedButtonThemeData(
                 style: ElevatedButton.styleFrom(
-                  foregroundColor: const Color.fromARGB(255, 63, 63, 63),
+                  foregroundColor: Colors.white,
                   backgroundColor: Colors.blue,
                 ),
               ),

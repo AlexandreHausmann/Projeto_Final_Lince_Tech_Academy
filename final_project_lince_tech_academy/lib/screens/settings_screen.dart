@@ -8,7 +8,6 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
-    final isLightTheme = themeProvider.themeMode == ThemeMode.light;
 
     return Scaffold(
       appBar: AppBar(
@@ -22,10 +21,6 @@ class SettingsScreen extends StatelessWidget {
               onPressed: () {
                 themeProvider.setThemeMode(ThemeMode.light);
               },
-              style: ElevatedButton.styleFrom(
-                foregroundColor: Colors.white,
-                 backgroundColor: Colors.blue,
-              ),
               child: const Text('Claro'),
             ),
             const SizedBox(height: 20),
@@ -33,10 +28,6 @@ class SettingsScreen extends StatelessWidget {
               onPressed: () {
                 themeProvider.setThemeMode(ThemeMode.dark);
               },
-              style: ElevatedButton.styleFrom(
-                foregroundColor: Colors.white,
-                backgroundColor: isLightTheme ? Colors.grey : Colors.blue,
-              ),
               child: const Text('Escuro'),
             ),
             const SizedBox(height: 20),
@@ -44,10 +35,6 @@ class SettingsScreen extends StatelessWidget {
               onPressed: () {
                 themeProvider.setThemeMode(ThemeMode.system);
               },
-              style: ElevatedButton.styleFrom(
-                foregroundColor: Colors.white,
-                 backgroundColor: isLightTheme ? Colors.grey : Colors.blue,
-              ),
               child: const Text('Automático'),
             ),
           ],

@@ -16,16 +16,16 @@ class VehicleProvider extends ChangeNotifier {
 
   Future<void> addVehicle(Vehicle vehicle) async {
     await _dbService.insertVehicle(vehicle);
-    await fetchVehicles(); // Atualiza a lista após adicionar
+    await fetchVehicles();
   }
 
   Future<void> updateVehicle(Vehicle vehicle) async {
     await _dbService.updateVehicle(vehicle);
-    await fetchVehicles(); // Atualiza a lista após atualizar
+    await fetchVehicles();
   }
 
   Future<void> deleteVehicle(int id) async {
     await _dbService.deleteVehicle(id);
-    await fetchVehicles(); // Atualiza a lista após excluir
+    await fetchVehicles(); 
   }
 }

@@ -21,7 +21,7 @@ class CustomerProvider extends ChangeNotifier {
 
   void addCustomer(Customer customer) {
     _dbService.insertCustomer(customer).then((_) {
-      fetchCustomers(); // Atualiza a lista após adicionar
+      fetchCustomers();
     }).catchError((error) {
       print('Error adding customer: $error');
     });
@@ -29,7 +29,7 @@ class CustomerProvider extends ChangeNotifier {
 
   void updateCustomer(Customer customer) {
     _dbService.updateCustomer(customer).then((_) {
-      fetchCustomers(); // Atualiza a lista após atualizar
+      fetchCustomers();
     }).catchError((error) {
       print('Error updating customer: $error');
     });
@@ -37,7 +37,7 @@ class CustomerProvider extends ChangeNotifier {
 
   void deleteCustomer(int id) {
     _dbService.deleteCustomer(id).then((_) {
-      fetchCustomers(); // Atualiza a lista após excluir
+      fetchCustomers(); 
     }).catchError((error) {
       print('Error deleting customer: $error');
     });

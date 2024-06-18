@@ -97,7 +97,6 @@ class CustomerListScreen extends StatelessWidget {
                           context,
                           MaterialPageRoute(builder: (_) => const CustomerFormScreen()),
                         ).then((_) {
-                          // After navigating back from adding a new customer, fetch updated list
                           customerProvider.fetchCustomers();
                         });
                       },

@@ -19,7 +19,7 @@ class ManagerProvider extends ChangeNotifier {
 
   void addManager(Manager manager) {
     _dbService.insertManager(manager).then((_) {
-      fetchManagers(); // Atualiza a lista após adicionar
+      fetchManagers();
     }).catchError((error) {
       print('Error adding manager: $error');
     });
@@ -27,7 +27,7 @@ class ManagerProvider extends ChangeNotifier {
 
   void updateManager(Manager manager) {
     _dbService.updateManager(manager).then((_) {
-      fetchManagers(); // Atualiza a lista após atualizar
+      fetchManagers();
     }).catchError((error) {
       print('Error updating manager: $error');
     });
@@ -35,7 +35,7 @@ class ManagerProvider extends ChangeNotifier {
 
   void deleteManager(int id) {
     _dbService.deleteManager(id).then((_) {
-      fetchManagers(); // Atualiza a lista após excluir
+      fetchManagers();
     }).catchError((error) {
       print('Error deleting manager: $error');
     });

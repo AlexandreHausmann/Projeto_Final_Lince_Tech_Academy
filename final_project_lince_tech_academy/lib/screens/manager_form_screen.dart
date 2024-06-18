@@ -47,7 +47,7 @@ class _ManagerFormScreenState extends State<ManagerFormScreen> {
       } else {
         Provider.of<ManagerProvider>(context, listen: false).updateManager(newManager);
       }
-      Navigator.pop(context); // Fecha a tela de adição
+      Navigator.pop(context);
     }
   }
 
@@ -85,7 +85,6 @@ class _ManagerFormScreenState extends State<ManagerFormScreen> {
                     if (value!.isEmpty) {
                       return 'Por favor, insira o CPF';
                     }
-                    // Adicione validações adicionais para CPF se necessário
                     return null;
                   },
                   onSaved: (value) {
@@ -112,7 +111,6 @@ class _ManagerFormScreenState extends State<ManagerFormScreen> {
                     if (value!.isEmpty) {
                       return 'Por favor, insira o telefone';
                     }
-                    // Adicione validações adicionais para telefone se necessário
                     return null;
                   },
                   onSaved: (value) {

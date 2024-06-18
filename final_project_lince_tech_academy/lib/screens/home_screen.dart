@@ -45,12 +45,8 @@ class HomeScreen extends StatelessWidget {
                     Navigator.pushNamed(context, '/customers');
                   },
                   style: ElevatedButton.styleFrom(
-                    foregroundColor: isDarkMode
-                        ? Colors.white
-                        : const Color.fromARGB(255, 109, 96, 96),
-                    backgroundColor: isDarkMode
-                        ? Colors.grey
-                        : const Color.fromARGB(255, 112, 137, 165),
+                    foregroundColor: Colors.white,
+                    backgroundColor: isDarkMode ? Colors.grey : Colors.blue,
                   ),
                   child: const Text('Clientes'),
                 ),
@@ -60,12 +56,8 @@ class HomeScreen extends StatelessWidget {
                     Navigator.pushNamed(context, '/managers');
                   },
                   style: ElevatedButton.styleFrom(
-                    foregroundColor: isDarkMode
-                        ? Colors.white
-                        : const Color.fromARGB(255, 109, 96, 96),
-                    backgroundColor: isDarkMode
-                        ? Colors.grey
-                        : const Color.fromARGB(255, 112, 137, 165),
+                    foregroundColor: Colors.white,
+                    backgroundColor: isDarkMode ? Colors.grey : Colors.blue,
                   ),
                   child: const Text('Gerentes'),
                 ),
@@ -75,12 +67,8 @@ class HomeScreen extends StatelessWidget {
                     Navigator.pushNamed(context, '/vehicles');
                   },
                   style: ElevatedButton.styleFrom(
-                    foregroundColor: isDarkMode
-                        ? Colors.white
-                        : const Color.fromARGB(255, 109, 96, 96),
-                    backgroundColor: isDarkMode
-                        ? Colors.grey
-                        : const Color.fromARGB(255, 112, 137, 165),
+                    foregroundColor: Colors.white,
+                    backgroundColor: isDarkMode ? Colors.grey : Colors.blue,
                   ),
                   child: const Text('Veículos'),
                 ),
@@ -90,12 +78,8 @@ class HomeScreen extends StatelessWidget {
                     Navigator.pushNamed(context, '/rents');
                   },
                   style: ElevatedButton.styleFrom(
-                    foregroundColor: isDarkMode
-                        ? Colors.white
-                        : const Color.fromARGB(255, 109, 96, 96),
-                    backgroundColor: isDarkMode
-                        ? Colors.grey
-                        : const Color.fromARGB(255, 112, 137, 165),
+                    foregroundColor: Colors.white,
+                    backgroundColor: isDarkMode ? Colors.grey : Colors.blue,
                   ),
                   child: const Text('Aluguéis'),
                 ),

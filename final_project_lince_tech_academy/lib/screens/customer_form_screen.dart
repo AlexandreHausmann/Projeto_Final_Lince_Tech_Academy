@@ -46,12 +46,8 @@ class _CustomerFormScreenState extends State<CustomerFormScreen> {
         Provider.of<CustomerProvider>(context, listen: false).addCustomer(newCustomer);
       } else {
         Provider.of<CustomerProvider>(context, listen: false).updateCustomer(newCustomer);
-      }
-      
-      // Fecha a tela de adição ou edição
+      } 
       Navigator.pop(context);
-
-      // Navega de volta para a lista de clientes
       Navigator.pushNamed(context, '/customers');
     }
   }
