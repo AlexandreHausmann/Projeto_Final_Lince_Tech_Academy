@@ -45,8 +45,6 @@ class CustomerProvider extends ChangeNotifier {
 
   Future<Customer?> fetchCustomerData(String cnpj) async {
     final url = 'https://brasilapi.com.br/api/cnpj/v1/$cnpj';
-   
-
 
     try {
       final response = await http.get(Uri.parse(url));
@@ -54,11 +52,11 @@ class CustomerProvider extends ChangeNotifier {
         final data = json.decode(response.body);
         final customer = Customer(
           id: _generateUniqueId(),
+          cnpj: data['cnpj'],
           name: data['razao_social'],
           phone: data['ddd_telefone_1'],
           city: data['municipio'],
           state: data['uf'],
-          cnpj: data['cnpj'],
         );
         return customer;
       } else if (response.statusCode == 400) {

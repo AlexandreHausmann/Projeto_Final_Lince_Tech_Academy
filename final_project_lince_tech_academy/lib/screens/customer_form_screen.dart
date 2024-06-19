@@ -3,6 +3,7 @@ import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:provider/provider.dart';
 import '../providers/customer_provider.dart';
 import '../models/customer.dart';
+import 'customer_list_screen.dart'; // Importe a tela de lista de clientes
 
 class CustomerFormScreen extends StatefulWidget {
   final Customer? customer;
@@ -23,15 +24,15 @@ class _CustomerFormScreenState extends State<CustomerFormScreen> {
 
   final _cnpjFormatter = MaskTextInputFormatter(
     mask: '##.###.###/####-##',
-    filter: { "#": RegExp(r'[0-9]') },
+    filter: {"#": RegExp(r'[0-9]')},
   );
 
   @override
   void initState() {
     super.initState();
+    _cnpj = widget.customer?.cnpj ?? '';
     _name = widget.customer?.name ?? '';
     _phone = widget.customer?.phone ?? '';
-    _cnpj = widget.customer?.cnpj ?? '';
     _city = widget.customer?.city ?? '';
     _state = widget.customer?.state ?? '';
   }
@@ -39,35 +40,41 @@ class _CustomerFormScreenState extends State<CustomerFormScreen> {
   Future<void> _saveForm() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
+      final cleanedCnpj = _cnpj.replaceAll(RegExp(r'[^\d]'), '');
 
-      if (Provider.of<CustomerProvider>(context, listen: false).isCnpjDuplicate(_cnpj) && widget.customer == null) {
+      if (Provider.of<CustomerProvider>(context, listen: false)
+              .isCnpjDuplicate(cleanedCnpj) &&
+          widget.customer == null) {
         _showErrorDialog('CNPJ já cadastrado.');
         return;
       }
 
-     
-
       try {
-        final fetchedCustomer = await Provider.of<CustomerProvider>(context, listen: false).fetchCustomerData(_cnpj);
-        if (fetchedCustomer != null) {
-          final newCustomer = Customer(
-            id: widget.customer?.id ?? DateTime.now().millisecondsSinceEpoch,
-            name: fetchedCustomer.name,
-            phone: fetchedCustomer.phone,
-            cnpj: fetchedCustomer.cnpj,
-            city: fetchedCustomer.city,
-            state: fetchedCustomer.state,
-          );
+        final fetchedCustomer =
+            await Provider.of<CustomerProvider>(context, listen: false)
+                .fetchCustomerData(cleanedCnpj);
+        final newCustomer = Customer(
+          id: widget.customer?.id ?? DateTime.now().millisecondsSinceEpoch,
+          name: fetchedCustomer?.name ?? _name,
+          phone: fetchedCustomer?.phone ?? _phone,
+          cnpj: fetchedCustomer?.cnpj ?? cleanedCnpj,
+          city: fetchedCustomer?.city ?? _city,
+          state: fetchedCustomer?.state ?? _state,
+        );
 
-          if (widget.customer == null) {
-            Provider.of<CustomerProvider>(context, listen: false).addCustomer(newCustomer);
-          } else {
-            Provider.of<CustomerProvider>(context, listen: false).updateCustomer(newCustomer);
-          } 
-          Navigator.pop(context);
+        if (widget.customer == null) {
+          Provider.of<CustomerProvider>(context, listen: false)
+              .addCustomer(newCustomer);
         } else {
-          throw Exception('CNPJ não encontrado.');
+          Provider.of<CustomerProvider>(context, listen: false)
+              .updateCustomer(newCustomer);
         }
+
+        // Navega de volta para a tela de listagem após salvar/atualizar
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const CustomerListScreen()),
+        );
       } catch (error) {
         _showErrorDialog(error.toString());
       }
@@ -77,15 +84,28 @@ class _CustomerFormScreenState extends State<CustomerFormScreen> {
   void _fetchCustomerData() async {
     if (_cnpj.isNotEmpty) {
       try {
-        final customer = await Provider.of<CustomerProvider>(context, listen: false).fetchCustomerData(_cnpj);
+        final cleanedCnpj = _cnpj.replaceAll(RegExp(r'[^\d]'), '');
+
+        final customer =
+            await Provider.of<CustomerProvider>(context, listen: false)
+                .fetchCustomerData(cleanedCnpj);
         if (customer != null) {
           setState(() {
+            _cnpj = customer.cnpj;
             _name = customer.name;
             _phone = customer.phone;
             _city = customer.city;
             _state = customer.state;
-            _cnpj = customer.cnpj;
           });
+        } else {
+          setState(() {
+            _cnpj = '';
+            _name = '';
+            _phone = '';
+            _city = '';
+            _state = '';
+          });
+          _showErrorDialog('CNPJ não encontrado.');
         }
       } catch (error) {
         _showErrorDialog(error.toString());
@@ -116,6 +136,14 @@ class _CustomerFormScreenState extends State<CustomerFormScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.customer == null ? 'Novo Cliente' : 'Editar Cliente'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.close),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -212,5 +240,6 @@ class _CustomerFormScreenState extends State<CustomerFormScreen> {
         ),
       ),
     );
-  } 
+  }
 }
+

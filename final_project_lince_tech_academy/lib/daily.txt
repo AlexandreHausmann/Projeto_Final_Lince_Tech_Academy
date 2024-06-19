@@ -83,6 +83,10 @@ pretendo ver pra poder implementar o BRasilAPI
 sem duvidas 
 
 daily 19/06 
+adicionei a API do brasilAPI tive algumas dificuldades mas consegui resolver 
+vou continuar revendo as regras de negocio, a principio quero ver sobre veiculos e fipeAPI
+(aproveitar ja que andei vendo sobre api recentemente )
+sem duvidas 
 
 
 
@@ -93,6 +97,5 @@ daily 19/06
 
 
 
-
-
+// ajustar cliente 
 // procurar uma api no final para validar o CPF 
