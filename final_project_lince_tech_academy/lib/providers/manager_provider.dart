@@ -13,7 +13,6 @@ class ManagerProvider extends ChangeNotifier {
       _managers = fetchedManagers.map((e) => Manager.fromMap(e)).toList();
       notifyListeners();
     }).catchError((error) {
-      print('Error fetching managers: $error');
     });
   }
 
@@ -21,7 +20,6 @@ class ManagerProvider extends ChangeNotifier {
     _dbService.insertManager(manager).then((_) {
       fetchManagers();
     }).catchError((error) {
-      print('Error adding manager: $error');
     });
   }
 
@@ -29,7 +27,6 @@ class ManagerProvider extends ChangeNotifier {
     _dbService.updateManager(manager).then((_) {
       fetchManagers();
     }).catchError((error) {
-      print('Error updating manager: $error');
     });
   }
 
@@ -37,7 +34,6 @@ class ManagerProvider extends ChangeNotifier {
     _dbService.deleteManager(id).then((_) {
       fetchManagers();
     }).catchError((error) {
-      print('Error deleting manager: $error');
     });
   }
 }

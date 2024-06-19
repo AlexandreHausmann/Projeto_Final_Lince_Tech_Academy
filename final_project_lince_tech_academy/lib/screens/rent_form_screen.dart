@@ -100,7 +100,7 @@ class _RentFormScreenState extends State<RentFormScreen> {
               children: <Widget>[
                 TextFormField(
                   initialValue: _clientName,
-                  decoration: InputDecoration(labelText: 'Nome do Cliente'),
+                  decoration:const InputDecoration(labelText: 'Nome do Cliente'),
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Por favor, insira o nome do cliente';
@@ -113,7 +113,7 @@ class _RentFormScreenState extends State<RentFormScreen> {
                 ),
                 TextFormField(
                   initialValue: _vehicleModel,
-                  decoration: InputDecoration(labelText: 'Modelo do Veículo'),
+                  decoration:const InputDecoration(labelText: 'Modelo do Veículo'),
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Por favor, insira o modelo do veículo';
@@ -129,7 +129,7 @@ class _RentFormScreenState extends State<RentFormScreen> {
                     Expanded(
                       child: TextFormField(
                         initialValue: DateFormat('dd/MM/yyyy').format(_startDate),
-                        decoration: InputDecoration(labelText: 'Data de Início'),
+                        decoration:const InputDecoration(labelText: 'Data de Início'),
                         readOnly: true,
                         onTap: () => _selectStartDate(context),
                         validator: (value) {
@@ -144,7 +144,7 @@ class _RentFormScreenState extends State<RentFormScreen> {
                     Expanded(
                       child: TextFormField(
                         initialValue: DateFormat('dd/MM/yyyy').format(_endDate),
-                        decoration: InputDecoration(labelText: 'Data de Término'),
+                        decoration:const InputDecoration(labelText: 'Data de Término'),
                         readOnly: true,
                         onTap: () => _selectEndDate(context),
                         validator: (value) {
@@ -159,7 +159,7 @@ class _RentFormScreenState extends State<RentFormScreen> {
                 ),
                 TextFormField(
                   initialValue: _totalDays.toString(),
-                  decoration: InputDecoration(labelText: 'Total de Dias'),
+                  decoration:const InputDecoration(labelText: 'Total de Dias'),
                   keyboardType: TextInputType.number,
                   validator: (value) {
                     if (value!.isEmpty) {
@@ -177,8 +177,8 @@ class _RentFormScreenState extends State<RentFormScreen> {
                 ),
                 TextFormField(
                   initialValue: _totalAmount.toString(),
-                  decoration: InputDecoration(labelText: 'Valor Total'),
-                  keyboardType: TextInputType.numberWithOptions(decimal: true),
+                  decoration:const InputDecoration(labelText: 'Valor Total'),
+                  keyboardType:const TextInputType.numberWithOptions(decimal: true),
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Por favor, insira o valor total';

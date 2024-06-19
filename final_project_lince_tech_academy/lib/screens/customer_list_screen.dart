@@ -10,7 +10,7 @@ class CustomerListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final customerProvider = Provider.of<CustomerProvider>(context);
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       customerProvider.fetchCustomers();
     });
 
@@ -18,7 +18,7 @@ class CustomerListScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Lista de Clientes'),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon:const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.of(context).popUntil(ModalRoute.withName('/'));
           },
@@ -47,7 +47,7 @@ class CustomerListScreen extends StatelessWidget {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               IconButton(
-                                icon: Icon(Icons.edit),
+                                icon:const Icon(Icons.edit),
                                 onPressed: () {
                                   Navigator.of(context).push(
                                     MaterialPageRoute(
@@ -57,7 +57,7 @@ class CustomerListScreen extends StatelessWidget {
                                 },
                               ),
                               IconButton(
-                                icon: Icon(Icons.delete),
+                                icon:const Icon(Icons.delete),
                                 onPressed: () {
                                   showDialog(
                                     context: context,

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/manager_provider.dart';
-import '../models/manager.dart';
 import 'manager_form_screen.dart';
 
 class ManagerListScreen extends StatelessWidget {
@@ -10,7 +9,7 @@ class ManagerListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final managerProvider = Provider.of<ManagerProvider>(context);
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       managerProvider.fetchManagers();
     });
 

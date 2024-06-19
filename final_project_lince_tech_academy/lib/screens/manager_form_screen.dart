@@ -67,7 +67,7 @@ class _ManagerFormScreenState extends State<ManagerFormScreen> {
               children: <Widget>[
                 TextFormField(
                   initialValue: _name,
-                  decoration: InputDecoration(labelText: 'Nome'),
+                  decoration:const InputDecoration(labelText: 'Nome'),
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Por favor, insira o nome';
@@ -80,7 +80,7 @@ class _ManagerFormScreenState extends State<ManagerFormScreen> {
                 ),
                 TextFormField(
                   initialValue: _cpf,
-                  decoration: InputDecoration(labelText: 'CPF'),
+                  decoration:const InputDecoration(labelText: 'CPF'),
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Por favor, insira o CPF';
@@ -93,7 +93,7 @@ class _ManagerFormScreenState extends State<ManagerFormScreen> {
                 ),
                 TextFormField(
                   initialValue: _state,
-                  decoration: InputDecoration(labelText: 'Estado'),
+                  decoration:const InputDecoration(labelText: 'Estado'),
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Por favor, insira o estado';
@@ -106,7 +106,7 @@ class _ManagerFormScreenState extends State<ManagerFormScreen> {
                 ),
                 TextFormField(
                   initialValue: _phone,
-                  decoration: InputDecoration(labelText: 'Telefone'),
+                  decoration:const InputDecoration(labelText: 'Telefone'),
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Por favor, insira o telefone';
@@ -119,8 +119,8 @@ class _ManagerFormScreenState extends State<ManagerFormScreen> {
                 ),
                 TextFormField(
                   initialValue: _commissionPercentage.toString(),
-                  decoration: InputDecoration(labelText: 'Porcentagem de Comissão'),
-                  keyboardType: TextInputType.numberWithOptions(decimal: true),
+                  decoration:const InputDecoration(labelText: 'Porcentagem de Comissão'),
+                  keyboardType:const TextInputType.numberWithOptions(decimal: true),
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Por favor, insira a porcentagem de comissão';

@@ -87,7 +87,7 @@ class _VehicleFormScreenState extends State<VehicleFormScreen> {
               children: <Widget>[
                 TextFormField(
                   initialValue: _brand,
-                  decoration: InputDecoration(labelText: 'Marca'),
+                  decoration:const InputDecoration(labelText: 'Marca'),
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Por favor, insira a marca';
@@ -100,7 +100,7 @@ class _VehicleFormScreenState extends State<VehicleFormScreen> {
                 ),
                 TextFormField(
                   initialValue: _model,
-                  decoration: InputDecoration(labelText: 'Modelo'),
+                  decoration:const InputDecoration(labelText: 'Modelo'),
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Por favor, insira o modelo';
@@ -113,7 +113,7 @@ class _VehicleFormScreenState extends State<VehicleFormScreen> {
                 ),
                 TextFormField(
                   initialValue: _plate,
-                  decoration: InputDecoration(labelText: 'Placa'),
+                  decoration:const InputDecoration(labelText: 'Placa'),
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Por favor, insira a placa';
@@ -126,7 +126,7 @@ class _VehicleFormScreenState extends State<VehicleFormScreen> {
                 ),
                 TextFormField(
                   initialValue: _year.toString(),
-                  decoration: InputDecoration(labelText: 'Ano de Fabricação'),
+                  decoration:const InputDecoration(labelText: 'Ano de Fabricação'),
                   keyboardType: TextInputType.number,
                   validator: (value) {
                     if (value!.isEmpty) {
@@ -144,7 +144,7 @@ class _VehicleFormScreenState extends State<VehicleFormScreen> {
                 ),
                 TextFormField(
                   initialValue: _dailyRate.toString(),
-                  decoration: InputDecoration(labelText: 'Custo da Diária de Aluguel'),
+                  decoration:const InputDecoration(labelText: 'Custo da Diária de Aluguel'),
                   keyboardType: TextInputType.number,
                   validator: (value) {
                     if (value!.isEmpty) {
@@ -175,10 +175,10 @@ class _VehicleFormScreenState extends State<VehicleFormScreen> {
                             height: 200,
                             fit: BoxFit.cover,
                           )
-                        : SizedBox.shrink(),
+                        :const SizedBox.shrink(),
                 ElevatedButton(
                   onPressed: _pickImage,
-                  child: Text('Selecionar Imagem'),
+                  child:const Text('Selecionar Imagem'),
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton(

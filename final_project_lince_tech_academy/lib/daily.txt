@@ -76,7 +76,23 @@ adicionar api, ver pdf
 
 daily 18/06
 aconteceu algo que me tomou tempo, mas foi um bug de IDE, basicamente os icones
- e a logo ficaram bugados com uma imagem de erro tentei configurar o pubSpec de novo,
- tentei alguns comando no terminal, por fim reiniciei a IDE e deu tudo cert ovoltou ao normal 
- eu arrumei meu thema que estava bugado ele só ficava escuro, agora ele ta correto 
- vou mecher com a lista de veiculos e alugueis 
+e a logo ficaram bugados com uma imagem de erro tentei configurar o pubSpec de novo,
+tentei alguns comando no terminal, por fim reiniciei a IDE e deu tudo cert ovoltou ao normal 
+eu arrumei meu thema que estava bugado ele só ficava escuro, agora ele ta correto 
+pretendo ver pra poder implementar o BRasilAPI  
+sem duvidas 
+
+daily 19/06 
+
+
+
+
+
+
+
+
+
+
+
+
+// procurar uma api no final para validar o CPF 

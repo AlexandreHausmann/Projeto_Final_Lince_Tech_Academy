@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:provider/provider.dart';
 import '../providers/customer_provider.dart';
 import '../models/customer.dart';
@@ -20,6 +21,11 @@ class _CustomerFormScreenState extends State<CustomerFormScreen> {
   late String _city;
   late String _state;
 
+  final _cnpjFormatter = MaskTextInputFormatter(
+    mask: '##.###.###/####-##',
+    filter: { "#": RegExp(r'[0-9]') },
+  );
+
   @override
   void initState() {
     super.initState();
@@ -30,26 +36,79 @@ class _CustomerFormScreenState extends State<CustomerFormScreen> {
     _state = widget.customer?.state ?? '';
   }
 
-  void _saveForm() {
+  Future<void> _saveForm() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      final newCustomer = Customer(
-        id: widget.customer?.id ?? DateTime.now().millisecondsSinceEpoch,
-        name: _name,
-        phone: _phone,
-        cnpj: _cnpj,
-        city: _city,
-        state: _state,
-      );
 
-      if (widget.customer == null) {
-        Provider.of<CustomerProvider>(context, listen: false).addCustomer(newCustomer);
-      } else {
-        Provider.of<CustomerProvider>(context, listen: false).updateCustomer(newCustomer);
-      } 
-      Navigator.pop(context);
-      Navigator.pushNamed(context, '/customers');
+      if (Provider.of<CustomerProvider>(context, listen: false).isCnpjDuplicate(_cnpj) && widget.customer == null) {
+        _showErrorDialog('CNPJ já cadastrado.');
+        return;
+      }
+
+     
+
+      try {
+        final fetchedCustomer = await Provider.of<CustomerProvider>(context, listen: false).fetchCustomerData(_cnpj);
+        if (fetchedCustomer != null) {
+          final newCustomer = Customer(
+            id: widget.customer?.id ?? DateTime.now().millisecondsSinceEpoch,
+            name: fetchedCustomer.name,
+            phone: fetchedCustomer.phone,
+            cnpj: fetchedCustomer.cnpj,
+            city: fetchedCustomer.city,
+            state: fetchedCustomer.state,
+          );
+
+          if (widget.customer == null) {
+            Provider.of<CustomerProvider>(context, listen: false).addCustomer(newCustomer);
+          } else {
+            Provider.of<CustomerProvider>(context, listen: false).updateCustomer(newCustomer);
+          } 
+          Navigator.pop(context);
+        } else {
+          throw Exception('CNPJ não encontrado.');
+        }
+      } catch (error) {
+        _showErrorDialog(error.toString());
+      }
     }
+  }
+
+  void _fetchCustomerData() async {
+    if (_cnpj.isNotEmpty) {
+      try {
+        final customer = await Provider.of<CustomerProvider>(context, listen: false).fetchCustomerData(_cnpj);
+        if (customer != null) {
+          setState(() {
+            _name = customer.name;
+            _phone = customer.phone;
+            _city = customer.city;
+            _state = customer.state;
+            _cnpj = customer.cnpj;
+          });
+        }
+      } catch (error) {
+        _showErrorDialog(error.toString());
+      }
+    }
+  }
+
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Erro'),
+        content: Text(message),
+        actions: [
+          TextButton(
+            child: const Text('OK'),
+            onPressed: () {
+              Navigator.of(ctx).pop();
+            },
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -67,8 +126,32 @@ class _CustomerFormScreenState extends State<CustomerFormScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 TextFormField(
+                  initialValue: _cnpj,
+                  decoration: InputDecoration(
+                    labelText: 'CNPJ',
+                    suffixIcon: IconButton(
+                      icon: const Icon(Icons.search),
+                      onPressed: _fetchCustomerData,
+                    ),
+                  ),
+                  inputFormatters: [_cnpjFormatter],
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Por favor, insira o CNPJ';
+                    }
+                    if (value.length != 18) {
+                      return 'CNPJ inválido';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) {
+                    _cnpj = value!;
+                  },
+                  keyboardType: TextInputType.number,
+                ),
+                TextFormField(
                   initialValue: _name,
-                  decoration: InputDecoration(labelText: 'Nome'),
+                  decoration: const InputDecoration(labelText: 'Nome'),
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Por favor, insira o nome';
@@ -81,7 +164,7 @@ class _CustomerFormScreenState extends State<CustomerFormScreen> {
                 ),
                 TextFormField(
                   initialValue: _phone,
-                  decoration: InputDecoration(labelText: 'Telefone'),
+                  decoration: const InputDecoration(labelText: 'Telefone'),
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Por favor, insira o telefone';
@@ -93,21 +176,8 @@ class _CustomerFormScreenState extends State<CustomerFormScreen> {
                   },
                 ),
                 TextFormField(
-                  initialValue: _cnpj,
-                  decoration: InputDecoration(labelText: 'CNPJ'),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Por favor, insira o CNPJ';
-                    }
-                    return null;
-                  },
-                  onSaved: (value) {
-                    _cnpj = value!;
-                  },
-                ),
-                TextFormField(
                   initialValue: _city,
-                  decoration: InputDecoration(labelText: 'Cidade'),
+                  decoration: const InputDecoration(labelText: 'Cidade'),
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Por favor, insira a cidade';
@@ -120,7 +190,7 @@ class _CustomerFormScreenState extends State<CustomerFormScreen> {
                 ),
                 TextFormField(
                   initialValue: _state,
-                  decoration: InputDecoration(labelText: 'Estado'),
+                  decoration: const InputDecoration(labelText: 'Estado'),
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Por favor, insira o estado';
@@ -142,5 +212,5 @@ class _CustomerFormScreenState extends State<CustomerFormScreen> {
         ),
       ),
     );
-  }
+  } 
 }
