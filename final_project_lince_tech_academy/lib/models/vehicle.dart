@@ -1,5 +1,5 @@
 class Vehicle {
-  final int? id;
+  final int id;
   final String brand;
   final String model;
   final String plate;
@@ -8,7 +8,7 @@ class Vehicle {
   final String imagePath;
 
   Vehicle({
-    this.id,
+    required this.id,
     required this.brand,
     required this.model,
     required this.plate,

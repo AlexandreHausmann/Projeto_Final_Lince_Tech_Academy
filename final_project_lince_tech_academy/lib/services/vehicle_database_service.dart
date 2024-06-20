@@ -18,7 +18,7 @@ class VehicleDatabaseService {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, filePath);
 
-    return await openDatabase(
+    return openDatabase(
       path,
       version: 1,
       onCreate: _createDB,
@@ -41,17 +41,17 @@ class VehicleDatabaseService {
 
   Future<List<Map<String, dynamic>>> getAllVehicles() async {
     final db = await instance.database;
-    return await db.query('vehicles');
+    return db.query('vehicles');
   }
 
   Future<int> insertVehicle(Vehicle vehicle) async {
     final db = await instance.database;
-    return await db.insert('vehicles', vehicle.toMap());
+    return db.insert('vehicles', vehicle.toMap());
   }
 
   Future<int> updateVehicle(Vehicle vehicle) async {
     final db = await instance.database;
-    return await db.update(
+    return db.update(
       'vehicles',
       vehicle.toMap(),
       where: 'id = ?',

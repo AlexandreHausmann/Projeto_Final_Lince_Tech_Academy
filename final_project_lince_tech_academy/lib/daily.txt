@@ -88,6 +88,7 @@ vou continuar revendo as regras de negocio, a principio quero ver sobre veiculos
 (aproveitar ja que andei vendo sobre api recentemente )
 sem duvidas 
 
+daily 20/06
 
 
 

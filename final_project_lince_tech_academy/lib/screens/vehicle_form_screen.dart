@@ -21,9 +21,10 @@ class _VehicleFormScreenState extends State<VehicleFormScreen> {
   late String _plate;
   late int _year;
   late double _dailyRate;
-  late String _imagePath = '';
+  late String _imagePath;
 
   File? _image;
+  List<String> _brands = [];
 
   @override
   void initState() {
@@ -34,6 +35,20 @@ class _VehicleFormScreenState extends State<VehicleFormScreen> {
     _year = widget.vehicle?.year ?? DateTime.now().year;
     _dailyRate = widget.vehicle?.dailyRate ?? 0.0;
     _imagePath = widget.vehicle?.imagePath ?? '';
+
+    _loadBrands();
+  }
+
+  Future<void> _loadBrands() async {
+    try {
+      final brands = await Provider.of<VehicleProvider>(context, listen: false).fetchVehicleBrands();
+      setState(() {
+        _brands = brands;
+        _brand = _brands.isNotEmpty ? _brands[0] : ''; // Seleciona a primeira marca se houver
+      });
+    } catch (error) {
+      print('Failed to load brands: $error');
+    }
   }
 
   Future<void> _pickImage() async {
@@ -66,8 +81,9 @@ class _VehicleFormScreenState extends State<VehicleFormScreen> {
       } else {
         Provider.of<VehicleProvider>(context, listen: false).updateVehicle(newVehicle);
       }
+
       Navigator.pop(context);
-      Navigator.pushNamed(context, '/vehicles'); 
+      Navigator.pushNamed(context, '/vehicles');
     }
   }
 
@@ -85,22 +101,32 @@ class _VehicleFormScreenState extends State<VehicleFormScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                TextFormField(
-                  initialValue: _brand,
-                  decoration:const InputDecoration(labelText: 'Marca'),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Por favor, insira a marca';
-                    }
-                    return null;
-                  },
-                  onSaved: (value) {
-                    _brand = value!;
-                  },
-                ),
+                _brands.isNotEmpty
+                    ? DropdownButtonFormField<String>(
+                        value: _brand.isEmpty ? null : _brand,
+                        decoration: const InputDecoration(labelText: 'Marca'),
+                        items: _brands.map((brand) {
+                          return DropdownMenuItem<String>(
+                            value: brand,
+                            child: Text(brand),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            _brand = value!;
+                          });
+                        },
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Por favor, selecione a marca';
+                          }
+                          return null;
+                        },
+                      )
+                    : const SizedBox.shrink(), // Exibe um widget vazio se não houver marcas carregadas
                 TextFormField(
                   initialValue: _model,
-                  decoration:const InputDecoration(labelText: 'Modelo'),
+                  decoration: const InputDecoration(labelText: 'Modelo'),
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Por favor, insira o modelo';
@@ -113,7 +139,7 @@ class _VehicleFormScreenState extends State<VehicleFormScreen> {
                 ),
                 TextFormField(
                   initialValue: _plate,
-                  decoration:const InputDecoration(labelText: 'Placa'),
+                  decoration: const InputDecoration(labelText: 'Placa'),
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Por favor, insira a placa';
@@ -126,7 +152,7 @@ class _VehicleFormScreenState extends State<VehicleFormScreen> {
                 ),
                 TextFormField(
                   initialValue: _year.toString(),
-                  decoration:const InputDecoration(labelText: 'Ano de Fabricação'),
+                  decoration: const InputDecoration(labelText: 'Ano de Fabricação'),
                   keyboardType: TextInputType.number,
                   validator: (value) {
                     if (value!.isEmpty) {
@@ -144,7 +170,7 @@ class _VehicleFormScreenState extends State<VehicleFormScreen> {
                 ),
                 TextFormField(
                   initialValue: _dailyRate.toString(),
-                  decoration:const InputDecoration(labelText: 'Custo da Diária de Aluguel'),
+                  decoration: const InputDecoration(labelText: 'Custo da Diária de Aluguel'),
                   keyboardType: TextInputType.number,
                   validator: (value) {
                     if (value!.isEmpty) {
@@ -175,10 +201,10 @@ class _VehicleFormScreenState extends State<VehicleFormScreen> {
                             height: 200,
                             fit: BoxFit.cover,
                           )
-                        :const SizedBox.shrink(),
+                        : const SizedBox.shrink(),
                 ElevatedButton(
                   onPressed: _pickImage,
-                  child:const Text('Selecionar Imagem'),
+                  child: const Text('Selecionar Imagem'),
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton(

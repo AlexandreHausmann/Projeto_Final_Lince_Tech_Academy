@@ -4,7 +4,7 @@ import '../providers/vehicle_provider.dart';
 import '../models/vehicle.dart';
 
 class VehicleListScreen extends StatelessWidget {
-  const VehicleListScreen({super.key});
+  const VehicleListScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,58 +22,55 @@ class VehicleListScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: FutureBuilder(
-        future: vehicleProvider.fetchVehicles(),
-        builder: (ctx, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return const Center(child: Text('Ocorreu um erro ao carregar os veículos.'));
-          } else {
-            return Consumer<VehicleProvider>(
-              builder: (ctx, vehicleProvider, _) => ListView.builder(
-                itemCount: vehicleProvider.vehicles.length,
-                itemBuilder: (ctx, i) {
-                  Vehicle vehicle = vehicleProvider.vehicles[i];
-                  return ListTile(
-                    title: Text(vehicle.model),
-                    subtitle: Text(vehicle.plate),
-                    onTap: () {
+      body: Consumer<VehicleProvider>(
+        builder: (ctx, vehicleProvider, _) => ListView.builder(
+          itemCount: vehicleProvider.vehicles.length,
+          itemBuilder: (ctx, i) {
+            Vehicle vehicle = vehicleProvider.vehicles[i];
+            return ListTile(
+              title: Text(vehicle.model),
+              subtitle: Text(vehicle.plate),
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.edit),
+                    onPressed: () {
                       Navigator.of(context).pushNamed('/add_vehicle', arguments: vehicle);
                     },
-                    trailing: IconButton(
-                      icon: const Icon(Icons.delete),
-                      onPressed: () {
-                        showDialog(
-                          context: context,
-                          builder: (ctx) => AlertDialog(
-                            title: const Text('Confirmar exclusão'),
-                            content: const Text('Deseja realmente excluir este veículo?'),
-                            actions: [
-                              TextButton(
-                                child: const Text('Cancelar'),
-                                onPressed: () {
-                                  Navigator.of(ctx).pop();
-                                },
-                              ),
-                              TextButton(
-                                child: const Text('Excluir'),
-                                onPressed: () {
-                                  vehicleProvider.deleteVehicle(vehicle.id!);
-                                  Navigator.of(ctx).pop();
-                                },
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-                  );
-                },
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.delete),
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (ctx) => AlertDialog(
+                          title: const Text('Confirmar exclusão'),
+                          content: const Text('Deseja realmente excluir este veículo?'),
+                          actions: [
+                            TextButton(
+                              child: const Text('Cancelar'),
+                              onPressed: () {
+                                Navigator.of(ctx).pop();
+                              },
+                            ),
+                            TextButton(
+                              child: const Text('Excluir'),
+                              onPressed: () {
+                                vehicleProvider.deleteVehicle(vehicle.id!);
+                                Navigator.of(ctx).pop();
+                              },
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ],
               ),
             );
-          }
-        },
+          },
+        ),
       ),
     );
   }

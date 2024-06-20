@@ -14,32 +14,24 @@ class CustomerProvider extends ChangeNotifier {
     _dbService.getAllCustomers().then((fetchedCustomers) {
       _customers = fetchedCustomers.map((e) => Customer.fromMap(e)).toList();
       notifyListeners();
-    }).catchError((error) {
-      print('Erro ao buscar clientes: $error');
     });
   }
 
   void addCustomer(Customer customer) {
     _dbService.insertCustomer(customer).then((_) {
       fetchCustomers();
-    }).catchError((error) {
-      print('Erro ao adicionar cliente: $error');
     });
   }
 
   void updateCustomer(Customer customer) {
     _dbService.updateCustomer(customer).then((_) {
       fetchCustomers();
-    }).catchError((error) {
-      print('Erro ao atualizar o cliente: $error');
     });
   }
 
   void deleteCustomer(int id) {
     _dbService.deleteCustomer(id).then((_) {
       fetchCustomers();
-    }).catchError((error) {
-      print('Erro ao deletar o cliente: $error');
     });
   }
 
@@ -66,9 +58,9 @@ class CustomerProvider extends ChangeNotifier {
         throw Exception('Erro ao buscar dados do cliente');
       }
     } catch (error) {
-      print('Erro ao buscar dados do cliente: $error');
-      rethrow;
+     'Erro ao buscar dados do cliente: $error';
     }
+    return null;
   }
 
   bool isCnpjDuplicate(String cnpj) {
