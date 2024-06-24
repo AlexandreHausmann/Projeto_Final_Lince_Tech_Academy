@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/manager_provider.dart';
-import '../models/manager.dart';
+import '../models/manager_model.dart';
 
 class ManagerFormScreen extends StatefulWidget {
-  final Manager? manager;
+  final ManagerModels? manager;
 
   const ManagerFormScreen({Key? key, this.manager}) : super(key: key);
 
@@ -33,7 +33,7 @@ class _ManagerFormScreenState extends State<ManagerFormScreen> {
   void _saveForm(BuildContext context) {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      final newManager = Manager(
+      final newManager = ManagerModels(
         id: widget.manager?.id ?? DateTime.now().millisecondsSinceEpoch,
         name: _name,
         cpf: _cpf,

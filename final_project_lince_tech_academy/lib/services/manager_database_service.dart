@@ -1,6 +1,6 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-import '../models/manager.dart';
+import '../models/manager_model.dart';
 
 class ManagerDatabaseService {
   static final ManagerDatabaseService instance = ManagerDatabaseService._init();
@@ -34,12 +34,12 @@ class ManagerDatabaseService {
     ''');
   }
 
-  Future<void> insertManager(Manager manager) async {
+  Future<void> insertManager(ManagerModels manager) async {
     final db = await instance.database;
     await db.insert('managers', manager.toMap());
   }
 
-  Future<void> updateManager(Manager manager) async {
+  Future<void> updateManager(ManagerModels manager) async {
     final db = await instance.database;
     await db.update(
       'managers',

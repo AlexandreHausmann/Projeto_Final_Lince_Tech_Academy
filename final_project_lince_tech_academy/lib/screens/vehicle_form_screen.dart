@@ -1,12 +1,12 @@
 import 'dart:io';
+import 'package:final_project_lince_tech_academy/models/vehicle_model.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import '../models/vehicle.dart';
 import '../providers/vehicle_provider.dart';
 
 class VehicleFormScreen extends StatefulWidget {
-  final Vehicle? vehicle;
+  final VehicleModels? vehicle;
 
   const VehicleFormScreen({Key? key, this.vehicle}) : super(key: key);
 
@@ -41,13 +41,18 @@ class _VehicleFormScreenState extends State<VehicleFormScreen> {
 
   Future<void> _loadBrands() async {
     try {
-      final brands = await Provider.of<VehicleProvider>(context, listen: false).fetchVehicleBrands();
+      final vehicleProvider = Provider.of<VehicleProvider>(context, listen: false);
+      await vehicleProvider.fetchVehicleBrands();
       setState(() {
-        _brands = brands;
-        _brand = _brands.isNotEmpty ? _brands[0] : ''; // Seleciona a primeira marca se houver
+        _brands = vehicleProvider.brands;
+        if (_brand.isEmpty && _brands.isNotEmpty) {
+          _brand = _brands[0];
+        }
       });
     } catch (error) {
-      print('Failed to load brands: $error');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Erro ao buscar dados do veículo: $error')),
+      );
     }
   }
 
@@ -66,8 +71,8 @@ class _VehicleFormScreenState extends State<VehicleFormScreen> {
   void _saveForm() {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      final newVehicle = Vehicle(
-        id: widget.vehicle?.id ?? DateTime.now().millisecondsSinceEpoch,
+      final newVehicle = VehicleModels(
+        id: widget.vehicle?.id,
         brand: _brand,
         model: _model,
         plate: _plate,
@@ -76,10 +81,11 @@ class _VehicleFormScreenState extends State<VehicleFormScreen> {
         imagePath: _imagePath,
       );
 
+      final vehicleProvider = Provider.of<VehicleProvider>(context, listen: false);
       if (widget.vehicle == null) {
-        Provider.of<VehicleProvider>(context, listen: false).addVehicle(newVehicle);
+        vehicleProvider.addVehicle(newVehicle);
       } else {
-        Provider.of<VehicleProvider>(context, listen: false).updateVehicle(newVehicle);
+        vehicleProvider.updateVehicle(newVehicle);
       }
 
       Navigator.pop(context);
@@ -123,7 +129,7 @@ class _VehicleFormScreenState extends State<VehicleFormScreen> {
                           return null;
                         },
                       )
-                    : const SizedBox.shrink(), // Exibe um widget vazio se não houver marcas carregadas
+                    : const SizedBox.shrink(),
                 TextFormField(
                   initialValue: _model,
                   decoration: const InputDecoration(labelText: 'Modelo'),

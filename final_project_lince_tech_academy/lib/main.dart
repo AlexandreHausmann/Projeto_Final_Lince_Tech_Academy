@@ -15,6 +15,7 @@ import 'screens/customer_form_screen.dart';
 import 'screens/manager_form_screen.dart';
 import 'screens/vehicle_form_screen.dart';
 import 'screens/rent_form_screen.dart';
+import 'repositories/vehicle_repository.dart';
 
 void main() {
   runApp(const MyApp());
@@ -25,11 +26,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final vehicleRepository = VehicleRepository();
+
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => CustomerProvider()),
         ChangeNotifierProvider(create: (_) => ManagerProvider()),
-        ChangeNotifierProvider(create: (_) => VehicleProvider()),
+        ChangeNotifierProvider(create: (_) => VehicleProvider(vehicleRepository: vehicleRepository)),
         ChangeNotifierProvider(create: (_) => RentProvider()),
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
       ],

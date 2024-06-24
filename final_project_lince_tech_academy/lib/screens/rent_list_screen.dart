@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/rent_provider.dart';
-import '../models/rent.dart';
+import '../models/rent_model.dart';
 
 class RentListScreen extends StatelessWidget {
   const RentListScreen({Key? key});
@@ -34,7 +34,7 @@ class RentListScreen extends StatelessWidget {
               builder: (ctx, rentProvider, _) => ListView.builder(
                 itemCount: rentProvider.rents.length,
                 itemBuilder: (ctx, i) {
-                  Rent rent = rentProvider.rents[i];
+                  RentModels rent = rentProvider.rents[i];
                   return Dismissible(
                     key: UniqueKey(),
                     direction: DismissDirection.endToStart,

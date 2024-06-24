@@ -1,4 +1,4 @@
-class Rent {
+class RentModels {
   final int? id;
   final String clientName;
   final String vehicleModel;
@@ -7,7 +7,7 @@ class Rent {
   final int totalDays;
   final double totalAmount;
 
-  Rent({
+  RentModels({
     this.id,
     required this.clientName,
     required this.vehicleModel,
@@ -31,8 +31,8 @@ class Rent {
     };
   }
 
-  factory Rent.fromMap(Map<String, dynamic> map) {
-    return Rent(
+  factory RentModels.fromMap(Map<String, dynamic> map) {
+    return RentModels(
       id: map['id'],
       clientName: map['clientName'],
       vehicleModel: map['vehicleModel'],

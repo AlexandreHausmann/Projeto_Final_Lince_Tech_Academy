@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/vehicle_provider.dart';
-import '../models/vehicle.dart';
+import '../models/vehicle_model.dart';
 
 class VehicleListScreen extends StatelessWidget {
   const VehicleListScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final vehicleProvider = Provider.of<VehicleProvider>(context);
+    Provider.of<VehicleProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -26,7 +26,7 @@ class VehicleListScreen extends StatelessWidget {
         builder: (ctx, vehicleProvider, _) => ListView.builder(
           itemCount: vehicleProvider.vehicles.length,
           itemBuilder: (ctx, i) {
-            Vehicle vehicle = vehicleProvider.vehicles[i];
+            VehicleModels vehicle = vehicleProvider.vehicles[i];
             return ListTile(
               title: Text(vehicle.model),
               subtitle: Text(vehicle.plate),

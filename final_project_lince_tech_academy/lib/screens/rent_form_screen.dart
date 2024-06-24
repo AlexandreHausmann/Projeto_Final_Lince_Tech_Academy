@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../providers/rent_provider.dart';
-import '../models/rent.dart';
+import '../models/rent_model.dart';
 
 class RentFormScreen extends StatefulWidget {
-  final Rent? rent;
+  final RentModels? rent;
 
   const RentFormScreen({Key? key, this.rent}) : super(key: key);
 
@@ -36,7 +36,7 @@ class _RentFormScreenState extends State<RentFormScreen> {
   void _saveForm() {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      final newRent = Rent(
+      final newRent = RentModels(
         id: widget.rent?.id ?? DateTime.now().millisecondsSinceEpoch,
         clientName: _clientName,
         vehicleModel: _vehicleModel,

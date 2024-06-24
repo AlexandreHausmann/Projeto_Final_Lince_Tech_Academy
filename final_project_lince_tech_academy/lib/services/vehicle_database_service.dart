@@ -1,6 +1,6 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-import '../models/vehicle.dart';
+import '../models/vehicle_model.dart';
 
 class VehicleDatabaseService {
   static final VehicleDatabaseService instance = VehicleDatabaseService._init();
@@ -44,12 +44,12 @@ class VehicleDatabaseService {
     return db.query('vehicles');
   }
 
-  Future<int> insertVehicle(Vehicle vehicle) async {
+  Future<int> insertVehicle(VehicleModels vehicle) async {
     final db = await instance.database;
     return db.insert('vehicles', vehicle.toMap());
   }
 
-  Future<int> updateVehicle(Vehicle vehicle) async {
+  Future<int> updateVehicle(VehicleModels vehicle) async {
     final db = await instance.database;
     return db.update(
       'vehicles',

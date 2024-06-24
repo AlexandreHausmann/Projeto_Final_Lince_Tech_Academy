@@ -1,4 +1,4 @@
-class Manager {
+class ManagerModels {
   final int? id;
   final String name;
   final String cpf;
@@ -6,7 +6,7 @@ class Manager {
   final String phone;
   final double commissionPercentage;
 
-  Manager({
+  ManagerModels({
     this.id,
     required this.name,
     required this.cpf,
@@ -26,8 +26,8 @@ class Manager {
     };
   }
 
-  factory Manager.fromMap(Map<String, dynamic> map) {
-    return Manager(
+  factory ManagerModels.fromMap(Map<String, dynamic> map) {
+    return ManagerModels(
       id: map['id'],
       name: map['name'],
       cpf: map['cpf'],

@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:provider/provider.dart';
 import '../providers/customer_provider.dart';
-import '../models/customer.dart';
+import '../models/customer_model.dart';
 import 'customer_list_screen.dart'; // Importe a tela de lista de clientes
 
 class CustomerFormScreen extends StatefulWidget {
-  final Customer? customer;
+  final CustomerModels? customer;
 
   const CustomerFormScreen({Key? key, this.customer}) : super(key: key);
 
@@ -53,7 +53,7 @@ class _CustomerFormScreenState extends State<CustomerFormScreen> {
         final fetchedCustomer =
             await Provider.of<CustomerProvider>(context, listen: false)
                 .fetchCustomerData(cleanedCnpj);
-        final newCustomer = Customer(
+        final newCustomer = CustomerModels(
           id: widget.customer?.id ?? DateTime.now().millisecondsSinceEpoch,
           name: fetchedCustomer?.name ?? _name,
           phone: fetchedCustomer?.phone ?? _phone,

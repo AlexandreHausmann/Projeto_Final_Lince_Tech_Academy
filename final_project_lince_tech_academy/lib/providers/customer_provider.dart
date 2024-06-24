@@ -1,29 +1,29 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import '../models/customer.dart';
+import '../models/customer_model.dart';
 import '../services/customer_database_service.dart';
 
 class CustomerProvider extends ChangeNotifier {
   final DatabaseService _dbService = DatabaseService.instance;
-  List<Customer> _customers = [];
+  List<CustomerModels> _customers = [];
 
-  List<Customer> get customers => _customers;
+  List<CustomerModels> get customers => _customers;
 
   void fetchCustomers() {
     _dbService.getAllCustomers().then((fetchedCustomers) {
-      _customers = fetchedCustomers.map((e) => Customer.fromMap(e)).toList();
+      _customers = fetchedCustomers.map((e) => CustomerModels.fromMap(e)).toList();
       notifyListeners();
     });
   }
 
-  void addCustomer(Customer customer) {
+  void addCustomer(CustomerModels customer) {
     _dbService.insertCustomer(customer).then((_) {
       fetchCustomers();
     });
   }
 
-  void updateCustomer(Customer customer) {
+  void updateCustomer(CustomerModels customer) {
     _dbService.updateCustomer(customer).then((_) {
       fetchCustomers();
     });
@@ -35,14 +35,14 @@ class CustomerProvider extends ChangeNotifier {
     });
   }
 
-  Future<Customer?> fetchCustomerData(String cnpj) async {
+  Future<CustomerModels?> fetchCustomerData(String cnpj) async {
     final url = 'https://brasilapi.com.br/api/cnpj/v1/$cnpj';
 
     try {
       final response = await http.get(Uri.parse(url));
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
-        final customer = Customer(
+        final customer = CustomerModels(
           id: _generateUniqueId(),
           cnpj: data['cnpj'],
           name: data['razao_social'],

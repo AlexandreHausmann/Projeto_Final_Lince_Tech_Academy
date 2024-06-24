@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/customer_provider.dart';
-import '../models/customer.dart';
+import '../models/customer_model.dart';
 import 'customer_form_screen.dart';
 
 class CustomerListScreen extends StatelessWidget {
@@ -33,7 +33,7 @@ class CustomerListScreen extends StatelessWidget {
                     child: ListView.builder(
                       itemCount: customerProvider.customers.length,
                       itemBuilder: (ctx, i) {
-                        Customer customer = customerProvider.customers[i];
+                        CustomerModels customer = customerProvider.customers[i];
                         return ListTile(
                           title: Text(customer.name),
                           onTap: () {

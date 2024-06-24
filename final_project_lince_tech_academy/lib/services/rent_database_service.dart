@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
-import '../models/rent.dart';
+import '../models/rent_model.dart';
 
 class RentDatabaseService {
   static final RentDatabaseService instance = RentDatabaseService._init();
@@ -37,12 +37,12 @@ class RentDatabaseService {
     ''');
   }
 
-  Future<void> insertRent(Rent rent) async {
+  Future<void> insertRent(RentModels rent) async {
     final db = await instance.database;
     await db.insert('rents', rent.toMap());
   }
 
-  Future<void> updateRent(Rent rent) async {
+  Future<void> updateRent(RentModels rent) async {
     final db = await instance.database;
     await db.update(
       'rents',

@@ -1,4 +1,4 @@
-class Customer {
+class CustomerModels {
   final int? id;
   final String name;
   final String phone;
@@ -6,7 +6,7 @@ class Customer {
   final String city;
   final String state;
 
-  Customer({
+  CustomerModels({
     this.id,
     required this.name,
     required this.phone,
@@ -26,8 +26,8 @@ class Customer {
     };
   }
 
-  factory Customer.fromMap(Map<String, dynamic> map) {
-    return Customer(
+  factory CustomerModels.fromMap(Map<String, dynamic> map) {
+    return CustomerModels(
       id: map['id'],
       name: map['name'],
       phone: map['phone'],

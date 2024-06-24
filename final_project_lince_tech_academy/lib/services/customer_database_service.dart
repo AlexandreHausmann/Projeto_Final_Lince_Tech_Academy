@@ -1,6 +1,6 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-import '../models/customer.dart';
+import '../models/customer_model.dart';
 
 class DatabaseService {
   static final DatabaseService instance = DatabaseService._init();
@@ -34,12 +34,12 @@ class DatabaseService {
     ''');
   }
 
-  Future<void> insertCustomer(Customer customer) async {
+  Future<void> insertCustomer(CustomerModels customer) async {
     final db = await instance.database;
     db.insert('customers', customer.toMap());
   }
 
-  Future<void> updateCustomer(Customer customer) async {
+  Future<void> updateCustomer(CustomerModels customer) async {
     final db = await instance.database;
     db.update(
       'customers',

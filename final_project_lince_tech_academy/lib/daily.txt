@@ -89,11 +89,14 @@ vou continuar revendo as regras de negocio, a principio quero ver sobre veiculos
 sem duvidas 
 
 daily 20/06
+dei inicio as telas do veiculo, adicionei a API 
+pretendo dar continuidade nessa parte 
+sem duvidas  
 
-
-
-
-
+daily 21/05 
+ontem depois da mentoria não tive tempo 
+e agr de manha também não 
+agora pra parte da tarde quero ver se volto a trabalhar com a API de carros no caso a IpeAPI
 
 
 
