@@ -98,8 +98,41 @@ ontem depois da mentoria não tive tempo
 e agr de manha também não 
 agora pra parte da tarde quero ver se volto a trabalhar com a API de carros no caso a IpeAPI
 
+daily 22/06
+daily 23/06
+
+daily 24/06
+Adicioneia a pasta repoitório ao projeto, configurei a api de veiculos 
+e ainda estou trabalhando nela para melhorar alguns detalhes, pretendo continuar trabalhando nela 
+sem duvidas 
+
+daily 25/06 
+Adicionei na pasta de rpositorios o repositório do cliente, fiz algumas alterações no formulario de veiculos 
+validei os campos de cliente e de veiculo e revisei as rotas, dei inicio a configuração de idiomas
+agora a tarde pretendo adicionar um botão de idimoas nas configurações para mudar o idioma 
+sem duvidas 
 
 
 
-// ajustar cliente 
-// procurar uma api no final para validar o CPF 
+//adicionar o shared preferences 
+//adicionar idioma ingles e portugues -> setings  
+//gerar relatório em PDF e poder imprimir 
+//ajustar cliente 
+//ajustar gerente 
+//ajustar veiculos
+//ajustar alugueis 
+//vincular cliente e gerente 
+
+aluguel 
+  No comprovante devem conter as seguintes informações:
+• Cabeçalho com nome da empresa: SS Automóveis
+• Data da geração do comprovante
+• Dados do cliente
+• Dados do veículo (incluindo foto)
+• Dados do gerente
+• Período do aluguel
+• Total de dias do período
+• Valor pago na diária
+• Valor total do aluguel
+
+// procurar uma api no final para validar o CPF -> brasil_fields

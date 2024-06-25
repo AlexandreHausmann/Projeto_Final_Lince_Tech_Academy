@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'providers/customer_provider.dart';
 import 'providers/manager_provider.dart';
 import 'providers/theme_provider.dart';
@@ -16,6 +17,7 @@ import 'screens/manager_form_screen.dart';
 import 'screens/vehicle_form_screen.dart';
 import 'screens/rent_form_screen.dart';
 import 'repositories/vehicle_repository.dart';
+import 'repositories/customer_repository.dart';
 
 void main() {
   runApp(const MyApp());
@@ -27,10 +29,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final vehicleRepository = VehicleRepository();
+    final customerRepository = CustomerRepository();
 
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => CustomerProvider()),
+        ChangeNotifierProvider(create: (_) => CustomerProvider(customerRepository: customerRepository)),
         ChangeNotifierProvider(create: (_) => ManagerProvider()),
         ChangeNotifierProvider(create: (_) => VehicleProvider(vehicleRepository: vehicleRepository)),
         ChangeNotifierProvider(create: (_) => RentProvider()),
@@ -79,6 +82,16 @@ class MyApp extends StatelessWidget {
               ),
             ),
             themeMode: themeProvider.themeMode,
+            locale: themeProvider.locale,
+            supportedLocales: const [
+              Locale('en', 'US'),
+              Locale('pt', 'BR'),
+            ],
+            localizationsDelegates: const [
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
           );
         },
       ),

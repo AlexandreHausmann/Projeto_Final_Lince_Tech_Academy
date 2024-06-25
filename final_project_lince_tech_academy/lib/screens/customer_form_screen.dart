@@ -3,7 +3,7 @@ import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:provider/provider.dart';
 import '../providers/customer_provider.dart';
 import '../models/customer_model.dart';
-import 'customer_list_screen.dart'; // Importe a tela de lista de clientes
+import 'customer_list_screen.dart';
 
 class CustomerFormScreen extends StatefulWidget {
   final CustomerModels? customer;
@@ -70,7 +70,6 @@ class _CustomerFormScreenState extends State<CustomerFormScreen> {
               .updateCustomer(newCustomer);
         }
 
-        // Navega de volta para a tela de listagem após salvar/atualizar
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const CustomerListScreen()),
@@ -242,4 +241,3 @@ class _CustomerFormScreenState extends State<CustomerFormScreen> {
     );
   }
 }
-

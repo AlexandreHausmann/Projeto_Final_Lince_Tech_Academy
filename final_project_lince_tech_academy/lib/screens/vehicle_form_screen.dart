@@ -1,9 +1,9 @@
 import 'dart:io';
-import 'package:final_project_lince_tech_academy/models/vehicle_model.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import '../providers/vehicle_provider.dart';
+import '../models/vehicle_model.dart';
 
 class VehicleFormScreen extends StatefulWidget {
   final VehicleModels? vehicle;

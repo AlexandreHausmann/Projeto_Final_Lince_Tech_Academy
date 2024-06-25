@@ -14,11 +14,14 @@ class VehicleListScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Lista de Veículos'),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: () {
-              Navigator.of(context).pushNamed('/add_vehicle');
-            },
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed('/add_vehicle');
+              },
+              child: const Text('Adicionar Veículo'),
+            ),
           ),
         ],
       ),
