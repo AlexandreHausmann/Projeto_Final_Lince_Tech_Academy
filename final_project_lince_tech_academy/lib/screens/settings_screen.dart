@@ -19,27 +19,87 @@ class SettingsScreen extends StatelessWidget {
           children: [
             ElevatedButton(
               onPressed: () {
-                themeProvider.setThemeMode(ThemeMode.light);
+                _showLanguageDialog(context, themeProvider);
               },
-              child: const Text('Claro'),
+              child: const Text('Idiomas'),
             ),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                themeProvider.setThemeMode(ThemeMode.dark);
+                _showThemeDialog(context, themeProvider);
               },
-              child: const Text('Escuro'),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                themeProvider.setThemeMode(ThemeMode.system);
-              },
-              child: const Text('Automático'),
+              child: const Text('Tema'),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  void _showLanguageDialog(BuildContext context, ThemeProvider themeProvider) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Selecione o Idioma'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                title: const Text('Português'),
+                onTap: () {
+                  themeProvider.setLocale(const Locale('pt', 'BR'));
+                  Navigator.of(context).pop();
+                },
+              ),
+              ListTile(
+                title: const Text('Inglês'),
+                onTap: () {
+                  themeProvider.setLocale(const Locale('en', 'US'));
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void _showThemeDialog(BuildContext context, ThemeProvider themeProvider) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Selecione o Tema'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                title: const Text('Claro'),
+                onTap: () {
+                  themeProvider.setThemeMode(ThemeMode.light);
+                  Navigator.of(context).pop();
+                },
+              ),
+              ListTile(
+                title: const Text('Escuro'),
+                onTap: () {
+                  themeProvider.setThemeMode(ThemeMode.dark);
+                  Navigator.of(context).pop();
+                },
+              ),
+              ListTile(
+                title: const Text('Automático'),
+                onTap: () {
+                  themeProvider.setThemeMode(ThemeMode.system);
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

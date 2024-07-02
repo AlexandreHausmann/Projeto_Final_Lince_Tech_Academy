@@ -1,39 +1,37 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import '../models/manager_model.dart';
 import '../services/manager_database_service.dart';
 
-class ManagerProvider extends ChangeNotifier {
-  final ManagerDatabaseService _dbService = ManagerDatabaseService.instance;
+class ManagerProvider with ChangeNotifier {
+  final DbManagerService _dbService = DbManagerService();
   List<ManagerModels> _managers = [];
 
-  List<ManagerModels> get managers => _managers;
+  List<ManagerModels> get managers => [..._managers];
 
-  void fetchManagers() {
-    _dbService.getAllManagers().then((fetchedManagers) {
-      _managers = fetchedManagers.map((e) => ManagerModels.fromMap(e)).toList();
+  Future<List<ManagerModels>> fetchManagers() async {
+    _managers = await _dbService.getManagers();
+    notifyListeners();
+    return _managers;
+  }
+
+  Future<void> addManager(ManagerModels manager) async {
+    final newManager = await _dbService.addManager(manager);
+    _managers.add(newManager);
+    notifyListeners();
+  }
+
+  Future<void> updateManager(ManagerModels manager) async {
+    await _dbService.updateManager(manager);
+    final index = _managers.indexWhere((m) => m.id == manager.id);
+    if (index != -1) {
+      _managers[index] = manager;
       notifyListeners();
-    }).catchError((error) {
-    });
+    }
   }
 
-  void addManager(ManagerModels manager) {
-    _dbService.insertManager(manager).then((_) {
-      fetchManagers();
-    }).catchError((error) {
-    });
-  }
-
-  void updateManager(ManagerModels manager) {
-    _dbService.updateManager(manager).then((_) {
-      fetchManagers();
-    }).catchError((error) {
-    });
-  }
-
-  void deleteManager(int id) {
-    _dbService.deleteManager(id).then((_) {
-      fetchManagers();
-    }).catchError((error) {
-    });
+  Future<void> deleteManager(String id) async {
+    await _dbService.deleteManager(id);
+    _managers.removeWhere((manager) => manager.id == id);
+    notifyListeners();
   }
 }

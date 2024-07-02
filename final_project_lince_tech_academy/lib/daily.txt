@@ -112,6 +112,33 @@ validei os campos de cliente e de veiculo e revisei as rotas, dei inicio a confi
 agora a tarde pretendo adicionar um botão de idimoas nas configurações para mudar o idioma 
 sem duvidas 
 
+daily 26/06
+dei continuidade na configuração de idiomas mas eu estou patinando muito e por hora vou deixar de lado 
+vou voltar a trabalhar na aplicação tenho que configurar a tela de alugueis e alguns detalhes 
+sem duvidas 
+
+daily 27/06
+estou passando tudo para o padrão MVC (model View controller) 
+e pra hoje eu pretendo dar continuidade nisso 
+sem duvidas 
+
+
+daily 28/06 
+continuo passando para o padrão MVC e to ageitando alguns detalhes pelo caminho 
+pretendo continuar com isso 
+sem duvidas 
+
+29/06
+30/06
+ 
+daily 01/07 
+ 
+ ajustei a parte de gerentes agora o nome sempre tera a primeira letra maiuscula 
+ o cpf vai formatar corretamente e o telefone tambem, listei o estados com a uf correspondente 
+ tive um problema com o emulador mas ja corrigi 
+ pretendo ver mais alguns detalhes que ainda falta
+ sem duvidas
+
 
 
 //adicionar o shared preferences 
@@ -136,3 +163,5 @@ aluguel
 • Valor total do aluguel
 
 // procurar uma api no final para validar o CPF -> brasil_fields
+
+//fazer um novo metodo para popular os valores 

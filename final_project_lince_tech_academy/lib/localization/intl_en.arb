@@ -1,0 +1,14 @@
+{
+  "@@locale": "en",
+  "title": "SS Automóveis",
+  "home": "Home",
+  "settings": "Settings",
+  "customers": "Customers",
+  "add_customer": "Add Customer",
+  "managers": "Managers",
+  "add_manager": "Add Manager",
+  "vehicles": "Vehicles",
+  "add_vehicle": "Add Vehicle",
+  "rents": "Rents",
+  "add_rent": "Add Rent"
+}

@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
+
 import 'providers/customer_provider.dart';
 import 'providers/manager_provider.dart';
+import 'providers/rent_provider.dart';
 import 'providers/theme_provider.dart';
 import 'providers/vehicle_provider.dart';
-import 'providers/rent_provider.dart';
+import 'repositories/customer_repository.dart';
+import 'repositories/vehicle_repository.dart';
+import 'screens/customer_form_screen.dart';
 import 'screens/customer_list_screen.dart';
 import 'screens/home_screen.dart';
+import 'screens/manager_form_screen.dart';
 import 'screens/manager_list_screen.dart';
+import 'screens/rent_form_screen.dart';
 import 'screens/rent_list_screen.dart';
 import 'screens/settings_screen.dart';
-import 'screens/vehicle_list_screen.dart';
-import 'screens/customer_form_screen.dart';
-import 'screens/manager_form_screen.dart';
 import 'screens/vehicle_form_screen.dart';
-import 'screens/rent_form_screen.dart';
-import 'repositories/vehicle_repository.dart';
-import 'repositories/customer_repository.dart';
+import 'screens/vehicle_list_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -82,16 +82,6 @@ class MyApp extends StatelessWidget {
               ),
             ),
             themeMode: themeProvider.themeMode,
-            locale: themeProvider.locale,
-            supportedLocales: const [
-              Locale('en', 'US'),
-              Locale('pt', 'BR'),
-            ],
-            localizationsDelegates: const [
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
           );
         },
       ),

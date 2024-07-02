@@ -1,5 +1,5 @@
 class ManagerModels {
-  final int? id;
+  final String? id;
   final String name;
   final String cpf;
   final String state;

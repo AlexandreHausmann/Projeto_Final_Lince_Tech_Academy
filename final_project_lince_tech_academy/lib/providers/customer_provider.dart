@@ -18,19 +18,19 @@ class CustomerProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addCustomer(CustomerModels customer) async {
+  Future<void> addCustomer(CustomerModels customer) async {
     await customerRepository.addCustomer(customer);
-    fetchCustomers();
+    fetchCustomers(); // Atualiza a lista após adicionar cliente
   }
 
-  void updateCustomer(CustomerModels customer) async {
+  Future<void> updateCustomer(CustomerModels customer) async {
     await customerRepository.updateCustomer(customer);
-    fetchCustomers();
+    fetchCustomers(); // Atualiza a lista após atualizar cliente
   }
 
   void deleteCustomer(int id) async {
     await customerRepository.deleteCustomer(id);
-    fetchCustomers();
+    fetchCustomers(); // Atualiza a lista após excluir cliente
   }
 
   Future<CustomerModels?> fetchCustomerData(String cnpj) async {

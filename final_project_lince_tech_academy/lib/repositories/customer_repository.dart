@@ -1,10 +1,8 @@
-
 import 'dart:convert';
 
 import '../models/customer_model.dart';
 import '../services/customer_database_service.dart';
 import 'package:http/http.dart' as http;
-
 
 class CustomerRepository {
   final DatabaseService _dbService = DatabaseService.instance;

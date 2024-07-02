@@ -88,26 +88,19 @@ class _CustomerFormScreenState extends State<CustomerFormScreen> {
         final customer =
             await Provider.of<CustomerProvider>(context, listen: false)
                 .fetchCustomerData(cleanedCnpj);
+
         if (customer != null) {
           setState(() {
-            _cnpj = customer.cnpj;
             _name = customer.name;
             _phone = customer.phone;
             _city = customer.city;
             _state = customer.state;
           });
         } else {
-          setState(() {
-            _cnpj = '';
-            _name = '';
-            _phone = '';
-            _city = '';
-            _state = '';
-          });
-          _showErrorDialog('CNPJ não encontrado.');
+          _showErrorDialog('CNPJ não encontrado na API BRASIL.');
         }
       } catch (error) {
-        _showErrorDialog(error.toString());
+        _showErrorDialog('Erro ao buscar CNPJ: $error');
       }
     }
   }
@@ -176,15 +169,10 @@ class _CustomerFormScreenState extends State<CustomerFormScreen> {
                   },
                   keyboardType: TextInputType.number,
                 ),
+                const SizedBox(height: 10),
                 TextFormField(
                   initialValue: _name,
                   decoration: const InputDecoration(labelText: 'Nome'),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Por favor, insira o nome';
-                    }
-                    return null;
-                  },
                   onSaved: (value) {
                     _name = value!;
                   },
@@ -192,12 +180,6 @@ class _CustomerFormScreenState extends State<CustomerFormScreen> {
                 TextFormField(
                   initialValue: _phone,
                   decoration: const InputDecoration(labelText: 'Telefone'),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Por favor, insira o telefone';
-                    }
-                    return null;
-                  },
                   onSaved: (value) {
                     _phone = value!;
                   },
@@ -205,12 +187,6 @@ class _CustomerFormScreenState extends State<CustomerFormScreen> {
                 TextFormField(
                   initialValue: _city,
                   decoration: const InputDecoration(labelText: 'Cidade'),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Por favor, insira a cidade';
-                    }
-                    return null;
-                  },
                   onSaved: (value) {
                     _city = value!;
                   },
@@ -218,12 +194,6 @@ class _CustomerFormScreenState extends State<CustomerFormScreen> {
                 TextFormField(
                   initialValue: _state,
                   decoration: const InputDecoration(labelText: 'Estado'),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Por favor, insira o estado';
-                    }
-                    return null;
-                  },
                   onSaved: (value) {
                     _state = value!;
                   },
