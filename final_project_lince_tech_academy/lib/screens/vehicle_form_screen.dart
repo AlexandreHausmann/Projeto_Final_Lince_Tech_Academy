@@ -16,11 +16,12 @@ class VehicleFormScreen extends StatefulWidget {
 
 class _VehicleFormScreenState extends State<VehicleFormScreen> {
   final _formKey = GlobalKey<FormState>();
-  late String _brand;
+  String? _brand; 
   late String _model;
   late String _plate;
   late int _year;
-  late double _dailyRate;
+  late String _dailyRateText; 
+  late double _dailyRate; 
   late String _imagePath;
 
   File? _image;
@@ -29,11 +30,12 @@ class _VehicleFormScreenState extends State<VehicleFormScreen> {
   @override
   void initState() {
     super.initState();
-    _brand = widget.vehicle?.brand ?? '';
+    _brand = null; 
     _model = widget.vehicle?.model ?? '';
     _plate = widget.vehicle?.plate ?? '';
     _year = widget.vehicle?.year ?? DateTime.now().year;
     _dailyRate = widget.vehicle?.dailyRate ?? 0.0;
+    _dailyRateText = _dailyRate.toStringAsFixed(2); 
     _imagePath = widget.vehicle?.imagePath ?? '';
 
     _loadBrands();
@@ -45,9 +47,6 @@ class _VehicleFormScreenState extends State<VehicleFormScreen> {
       await vehicleProvider.fetchVehicleBrands();
       setState(() {
         _brands = vehicleProvider.brands;
-        if (_brand.isEmpty && _brands.isNotEmpty) {
-          _brand = _brands[0];
-        }
       });
     } catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -73,7 +72,7 @@ class _VehicleFormScreenState extends State<VehicleFormScreen> {
       _formKey.currentState!.save();
       final newVehicle = VehicleModels(
         id: widget.vehicle?.id,
-        brand: _brand,
+        brand: _brand!,
         model: _model,
         plate: _plate,
         year: _year,
@@ -109,7 +108,7 @@ class _VehicleFormScreenState extends State<VehicleFormScreen> {
               children: <Widget>[
                 _brands.isNotEmpty
                     ? DropdownButtonFormField<String>(
-                        value: _brand.isEmpty ? null : _brand,
+                        value: _brand,
                         decoration: const InputDecoration(labelText: 'Marca'),
                         items: _brands.map((brand) {
                           return DropdownMenuItem<String>(
@@ -119,7 +118,7 @@ class _VehicleFormScreenState extends State<VehicleFormScreen> {
                         }).toList(),
                         onChanged: (value) {
                           setState(() {
-                            _brand = value!;
+                            _brand = value;
                           });
                         },
                         validator: (value) {
@@ -175,21 +174,23 @@ class _VehicleFormScreenState extends State<VehicleFormScreen> {
                   },
                 ),
                 TextFormField(
-                  initialValue: _dailyRate.toString(),
+                  initialValue: _dailyRateText.isNotEmpty ? 'R\$ $_dailyRateText' : '',
                   decoration: const InputDecoration(labelText: 'Custo da Diária de Aluguel'),
                   keyboardType: TextInputType.number,
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Por favor, insira o custo da diária';
                     }
-                    final dailyRate = double.tryParse(value);
+                    final trimmedValue = value.replaceFirst('R\$ ', '');
+                    final dailyRate = double.tryParse(trimmedValue);
                     if (dailyRate == null || dailyRate <= 0) {
                       return 'Por favor, insira um valor válido';
                     }
                     return null;
                   },
                   onSaved: (value) {
-                    _dailyRate = double.parse(value!);
+                    final trimmedValue = value!.replaceFirst('R\$ ', '');
+                    _dailyRate = double.parse(trimmedValue);
                   },
                 ),
                 const SizedBox(height: 20),

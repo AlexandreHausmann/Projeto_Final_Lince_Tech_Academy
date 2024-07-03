@@ -8,60 +8,75 @@ class VehicleListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<VehicleProvider>(context);
+    Provider.of<VehicleProvider>(context, listen: false).refreshVehicles();
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Lista de Veículos'),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pushNamed('/add_vehicle');
-              },
-              child: const Text('Adicionar Veículo'),
-            ),
-          ),
-        ],
       ),
       body: Consumer<VehicleProvider>(
-        builder: (ctx, vehicleProvider, _) => ListView.builder(
-          itemCount: vehicleProvider.vehicles.length,
-          itemBuilder: (ctx, i) {
-            VehicleModels vehicle = vehicleProvider.vehicles[i];
-            return ListTile(
-              title: Text(vehicle.model),
-              subtitle: Text(vehicle.plate),
-              trailing: Row(
-                mainAxisSize: MainAxisSize.min,
+        builder: (ctx, vehicleProvider, _) {
+          if (vehicleProvider.vehicles.isEmpty) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  IconButton(
-                    icon: const Icon(Icons.edit),
+                  const Text('Não há veículos cadastrados'),
+                  const SizedBox(height: 20),
+                  ElevatedButton(
                     onPressed: () {
-                      Navigator.of(context).pushNamed('/add_vehicle', arguments: vehicle);
+                      Navigator.of(context).pushNamed('/add_vehicle');
                     },
+                    child: const Text('Adicionar Veículo'),
                   ),
-                  IconButton(
-                    icon: const Icon(Icons.delete),
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (ctx) => AlertDialog(
-                          title: const Text('Confirmar exclusão'),
-                          content: const Text('Deseja realmente excluir este veículo?'),
-                          actions: [
-                            TextButton(
-                              child: const Text('Cancelar'),
+                ],
+              ),
+            );
+          } else {
+            return Column(
+              children: [
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: vehicleProvider.vehicles.length,
+                    itemBuilder: (ctx, i) {
+                      VehicleModels vehicle = vehicleProvider.vehicles[i];
+                      return ListTile(
+                        title: Text(vehicle.model),
+                        subtitle: Text(vehicle.plate),
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              icon: const Icon(Icons.edit),
                               onPressed: () {
-                                Navigator.of(ctx).pop();
+                                Navigator.of(context).pushNamed('/add_vehicle', arguments: vehicle);
                               },
                             ),
-                            TextButton(
-                              child: const Text('Excluir'),
+                            IconButton(
+                              icon: const Icon(Icons.delete),
                               onPressed: () {
-                                vehicleProvider.deleteVehicle(vehicle.id!);
-                                Navigator.of(ctx).pop();
+                                showDialog(
+                                  context: context,
+                                  builder: (ctx) => AlertDialog(
+                                    title: const Text('Confirmar exclusão'),
+                                    content: const Text('Deseja realmente excluir este veículo?'),
+                                    actions: [
+                                      TextButton(
+                                        child: const Text('Cancelar'),
+                                        onPressed: () {
+                                          Navigator.of(ctx).pop();
+                                        },
+                                      ),
+                                      TextButton(
+                                        child: const Text('Excluir'),
+                                        onPressed: () {
+                                          vehicleProvider.deleteVehicle(vehicle.id!);
+                                          Navigator.of(ctx).pop();
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                );
                               },
                             ),
                           ],
@@ -69,11 +84,17 @@ class VehicleListScreen extends StatelessWidget {
                       );
                     },
                   ),
-                ],
-              ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pushNamed('/add_vehicle');
+                  },
+                  child: const Text('Adicionar Veículo'),
+                ),
+              ],
             );
-          },
-        ),
+          }
+        },
       ),
     );
   }

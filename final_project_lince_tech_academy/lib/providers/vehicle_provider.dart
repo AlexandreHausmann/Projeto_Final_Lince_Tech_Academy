@@ -52,4 +52,8 @@ class VehicleProvider with ChangeNotifier {
     _vehicles.removeWhere((v) => v.id == id);
     notifyListeners();
   }
+
+  Future<void> refreshVehicles() async {
+    await _fetchVehicles();
+  }
 }

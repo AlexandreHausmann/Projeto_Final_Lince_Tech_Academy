@@ -89,12 +89,7 @@ class _ManagerFormScreenState extends State<ManagerFormScreen> {
 
         await _controller.fetchManagers();
 
-        final managerProvider = Provider.of<ManagerProvider>(context, listen: false);
-        if (managerProvider.managers.isEmpty) {
-          Navigator.pushReplacementNamed(context, '/noManagersScreen');
-        } else {
-          Navigator.pop(context);
-        }
+        Navigator.pushReplacementNamed(context, '/managers');
       } catch (e) {
         print('Error saving manager: $e');
       }

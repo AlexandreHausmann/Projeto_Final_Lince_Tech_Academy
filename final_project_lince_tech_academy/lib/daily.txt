@@ -139,7 +139,19 @@ daily 01/07
  pretendo ver mais alguns detalhes que ainda falta
  sem duvidas
 
+daily 02/07
 
+ajustado algumas regras de negócio dando continuidade nessa parte 
+sem duvidas 
+
+daily 03/07 
+tive que habilitar um novo emulador pq o anterior estava bem pesado
+oque me tomou um pouco de tempo pois estava insistindo nele 
+adicionei mais algumas regras de negócio na parte de gerentes 
+quero dar inicio a parte de veiculos 
+estou trabalhando da seguinte forma, toda vez que eu dou uma travada em uma parte do código eu pulo pra proxima 
+por enquanto esta dando certo, pois quando eu volto no problema eu consigo resolver 
+sem duvidas 
 
 //adicionar o shared preferences 
 //adicionar idioma ingles e portugues -> setings  
