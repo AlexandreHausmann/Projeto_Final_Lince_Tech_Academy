@@ -63,10 +63,10 @@ class _CustomerFormScreenState extends State<CustomerFormScreen> {
         );
 
         if (widget.customer == null) {
-          Provider.of<CustomerProvider>(context, listen: false)
+          await Provider.of<CustomerProvider>(context, listen: false)
               .addCustomer(newCustomer);
         } else {
-          Provider.of<CustomerProvider>(context, listen: false)
+          await Provider.of<CustomerProvider>(context, listen: false)
               .updateCustomer(newCustomer);
         }
 
@@ -130,10 +130,8 @@ class _CustomerFormScreenState extends State<CustomerFormScreen> {
         title: Text(widget.customer == null ? 'Novo Cliente' : 'Editar Cliente'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.close),
-            onPressed: () {
-              Navigator.pop(context);
-            },
+            icon: const Icon(Icons.search),
+            onPressed: _fetchCustomerData,
           ),
         ],
       ),
@@ -141,70 +139,83 @@ class _CustomerFormScreenState extends State<CustomerFormScreen> {
         padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                TextFormField(
-                  initialValue: _cnpj,
-                  decoration: InputDecoration(
-                    labelText: 'CNPJ',
-                    suffixIcon: IconButton(
-                      icon: const Icon(Icons.search),
-                      onPressed: _fetchCustomerData,
-                    ),
-                  ),
-                  inputFormatters: [_cnpjFormatter],
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Por favor, insira o CNPJ';
-                    }
-                    if (value.length != 18) {
-                      return 'CNPJ inválido';
-                    }
-                    return null;
-                  },
-                  onSaved: (value) {
-                    _cnpj = value!;
-                  },
-                  keyboardType: TextInputType.number,
-                ),
-                const SizedBox(height: 10),
-                TextFormField(
-                  initialValue: _name,
-                  decoration: const InputDecoration(labelText: 'Nome'),
-                  onSaved: (value) {
-                    _name = value!;
-                  },
-                ),
-                TextFormField(
-                  initialValue: _phone,
-                  decoration: const InputDecoration(labelText: 'Telefone'),
-                  onSaved: (value) {
-                    _phone = value!;
-                  },
-                ),
-                TextFormField(
-                  initialValue: _city,
-                  decoration: const InputDecoration(labelText: 'Cidade'),
-                  onSaved: (value) {
-                    _city = value!;
-                  },
-                ),
-                TextFormField(
-                  initialValue: _state,
-                  decoration: const InputDecoration(labelText: 'Estado'),
-                  onSaved: (value) {
-                    _state = value!;
-                  },
-                ),
-                const SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: _saveForm,
-                  child: Text(widget.customer == null ? 'Salvar' : 'Atualizar'),
-                ),
-              ],
-            ),
+          child: ListView(
+            children: [
+              TextFormField(
+                initialValue: _cnpj,
+                decoration: const InputDecoration(labelText: 'CNPJ'),
+                keyboardType: TextInputType.number,
+                inputFormatters: [_cnpjFormatter],
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Por favor, insira um CNPJ.';
+                  } else if (value.length != 18) {
+                    return 'O CNPJ deve ter 14 dígitos.';
+                  }
+                  return null;
+                },
+                onSaved: (value) {
+                  _cnpj = value!;
+                },
+              ),
+              TextFormField(
+                initialValue: _name,
+                decoration: const InputDecoration(labelText: 'Nome'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Por favor, insira um nome.';
+                  }
+                  return null;
+                },
+                onSaved: (value) {
+                  _name = value!;
+                },
+              ),
+              TextFormField(
+                initialValue: _phone,
+                decoration: const InputDecoration(labelText: 'Telefone'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Por favor, insira um telefone.';
+                  }
+                  return null;
+                },
+                onSaved: (value) {
+                  _phone = value!;
+                },
+              ),
+              TextFormField(
+                initialValue: _city,
+                decoration: const InputDecoration(labelText: 'Cidade'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Por favor, insira uma cidade.';
+                  }
+                  return null;
+                },
+                onSaved: (value) {
+                  _city = value!;
+                },
+              ),
+              TextFormField(
+                initialValue: _state,
+                decoration: const InputDecoration(labelText: 'Estado'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Por favor, insira um estado.';
+                  }
+                  return null;
+                },
+                onSaved: (value) {
+                  _state = value!;
+                },
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: _saveForm,
+                child: Text(widget.customer == null ? 'Salvar' : 'Atualizar'),
+              ),
+            ],
           ),
         ),
       ),

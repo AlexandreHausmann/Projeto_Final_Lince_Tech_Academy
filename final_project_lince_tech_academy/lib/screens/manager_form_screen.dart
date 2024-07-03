@@ -141,8 +141,8 @@ class _ManagerFormScreenState extends State<ManagerFormScreen> {
                     if (value == null || value.isEmpty) {
                       return 'Por favor, insira o CPF';
                     }
-                    if (value.length != 11) {
-                      return 'CPF deve conter 11 números';
+                    if (value.length != 14) {
+                      return 'Verifique o CPF, ele deve conter 11 numeros';
                     }
                     return null;
                   },

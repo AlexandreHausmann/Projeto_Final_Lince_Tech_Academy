@@ -5,15 +5,10 @@ import '../models/customer_model.dart';
 import 'customer_form_screen.dart';
 
 class CustomerListScreen extends StatelessWidget {
-  const CustomerListScreen({Key? key});
+  const CustomerListScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final customerProvider = Provider.of<CustomerProvider>(context);
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
-      customerProvider.fetchCustomers();
-    });
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Lista de Clientes'),

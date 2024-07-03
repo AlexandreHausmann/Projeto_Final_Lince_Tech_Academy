@@ -1,5 +1,3 @@
-// customer_form_controller.dart
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/customer_provider.dart';
@@ -37,7 +35,7 @@ class CustomerFormController {
             await Provider.of<CustomerProvider>(context, listen: false)
                 .fetchCustomerData(cleanedCnpj);
         final newCustomer = CustomerModels(
-          id: null, // assuming id will be generated on insertion
+          id: null, 
           name: fetchedCustomer?.name ?? name,
           phone: fetchedCustomer?.phone ?? phone,
           cnpj: fetchedCustomer?.cnpj ?? cleanedCnpj,
@@ -48,7 +46,7 @@ class CustomerFormController {
         Provider.of<CustomerProvider>(context, listen: false)
             .addCustomer(newCustomer);
 
-        Navigator.pop(context); // Assuming going back after saving
+        Navigator.pop(context); 
 
       } catch (error) {
         _showErrorDialog(error.toString());
