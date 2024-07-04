@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../providers/rent_provider.dart';
+import '../providers/customer_provider.dart';
 import '../models/rent_model.dart';
 
 class RentFormScreen extends StatefulWidget {
@@ -15,7 +16,7 @@ class RentFormScreen extends StatefulWidget {
 
 class _RentFormScreenState extends State<RentFormScreen> {
   final _formKey = GlobalKey<FormState>();
-  late String _clientName;
+  String? _selectedClient;
   late String _vehicleModel;
   late DateTime _startDate;
   late DateTime _endDate;
@@ -25,7 +26,7 @@ class _RentFormScreenState extends State<RentFormScreen> {
   @override
   void initState() {
     super.initState();
-    _clientName = widget.rent?.clientName ?? '';
+    _selectedClient = widget.rent?.clientName ?? '';
     _vehicleModel = widget.rent?.vehicleModel ?? '';
     _startDate = widget.rent?.startDate ?? DateTime.now();
     _endDate = widget.rent?.endDate ?? DateTime.now();
@@ -38,7 +39,7 @@ class _RentFormScreenState extends State<RentFormScreen> {
       _formKey.currentState!.save();
       final newRent = RentModels(
         id: widget.rent?.id ?? DateTime.now().millisecondsSinceEpoch,
-        clientName: _clientName,
+        clientName: _selectedClient!,
         vehicleModel: _vehicleModel,
         startDate: _startDate,
         endDate: _endDate,
@@ -86,6 +87,9 @@ class _RentFormScreenState extends State<RentFormScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final customerProvider = Provider.of<CustomerProvider>(context);
+    final customers = customerProvider.customers;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.rent == null ? 'Novo Aluguel' : 'Editar Aluguel'),
@@ -98,22 +102,33 @@ class _RentFormScreenState extends State<RentFormScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                TextFormField(
-                  initialValue: _clientName,
-                  decoration:const InputDecoration(labelText: 'Nome do Cliente'),
+                DropdownButtonFormField<String>(
+                  value: _selectedClient != null && _selectedClient!.isNotEmpty ? _selectedClient : null,
+                  decoration: const InputDecoration(labelText: 'Nome do Cliente'),
+                  items: customers.map((customer) {
+                    return DropdownMenuItem<String>(
+                      value: customer.name,
+                      child: Text(customer.name),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      _selectedClient = value!;
+                    });
+                  },
                   validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Por favor, insira o nome do cliente';
+                    if (value == null || value.isEmpty) {
+                      return 'Por favor, selecione um cliente';
                     }
                     return null;
                   },
                   onSaved: (value) {
-                    _clientName = value!;
+                    _selectedClient = value!;
                   },
                 ),
                 TextFormField(
                   initialValue: _vehicleModel,
-                  decoration:const InputDecoration(labelText: 'Modelo do Veículo'),
+                  decoration: const InputDecoration(labelText: 'Modelo do Veículo'),
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Por favor, insira o modelo do veículo';
@@ -129,7 +144,7 @@ class _RentFormScreenState extends State<RentFormScreen> {
                     Expanded(
                       child: TextFormField(
                         initialValue: DateFormat('dd/MM/yyyy').format(_startDate),
-                        decoration:const InputDecoration(labelText: 'Data de Início'),
+                        decoration: const InputDecoration(labelText: 'Data de Início'),
                         readOnly: true,
                         onTap: () => _selectStartDate(context),
                         validator: (value) {
@@ -144,7 +159,7 @@ class _RentFormScreenState extends State<RentFormScreen> {
                     Expanded(
                       child: TextFormField(
                         initialValue: DateFormat('dd/MM/yyyy').format(_endDate),
-                        decoration:const InputDecoration(labelText: 'Data de Término'),
+                        decoration: const InputDecoration(labelText: 'Data de Término'),
                         readOnly: true,
                         onTap: () => _selectEndDate(context),
                         validator: (value) {
@@ -159,7 +174,7 @@ class _RentFormScreenState extends State<RentFormScreen> {
                 ),
                 TextFormField(
                   initialValue: _totalDays.toString(),
-                  decoration:const InputDecoration(labelText: 'Total de Dias'),
+                  decoration: const InputDecoration(labelText: 'Total de Dias'),
                   keyboardType: TextInputType.number,
                   validator: (value) {
                     if (value!.isEmpty) {
@@ -177,8 +192,8 @@ class _RentFormScreenState extends State<RentFormScreen> {
                 ),
                 TextFormField(
                   initialValue: _totalAmount.toString(),
-                  decoration:const InputDecoration(labelText: 'Valor Total'),
-                  keyboardType:const TextInputType.numberWithOptions(decimal: true),
+                  decoration: const InputDecoration(labelText: 'Valor Total'),
+                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Por favor, insira o valor total';
