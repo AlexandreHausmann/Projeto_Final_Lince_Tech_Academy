@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../providers/rent_provider.dart';
 import '../providers/customer_provider.dart';
 import '../models/rent_model.dart';
+import '../models/customer_model.dart';
 
 class RentFormScreen extends StatefulWidget {
   final RentModels? rent;
@@ -22,16 +23,26 @@ class _RentFormScreenState extends State<RentFormScreen> {
   late DateTime _endDate;
   late int _totalDays;
   late double _totalAmount;
+  List<CustomerModels> _customers = [];
 
   @override
   void initState() {
     super.initState();
-    _selectedClient = widget.rent?.clientName ?? '';
+    _selectedClient = widget.rent?.clientName;
     _vehicleModel = widget.rent?.vehicleModel ?? '';
     _startDate = widget.rent?.startDate ?? DateTime.now();
     _endDate = widget.rent?.endDate ?? DateTime.now();
     _totalDays = widget.rent?.totalDays ?? 0;
     _totalAmount = widget.rent?.totalAmount ?? 0.0;
+    _loadCustomers();
+  }
+
+  Future<void> _loadCustomers() async {
+    final customerProvider = Provider.of<CustomerProvider>(context, listen: false);
+    await customerProvider.fetchCustomers();
+    setState(() {
+      _customers = customerProvider.customers;
+    });
   }
 
   void _saveForm() {
@@ -87,9 +98,6 @@ class _RentFormScreenState extends State<RentFormScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final customerProvider = Provider.of<CustomerProvider>(context);
-    final customers = customerProvider.customers;
-
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.rent == null ? 'Novo Aluguel' : 'Editar Aluguel'),
@@ -103,9 +111,18 @@ class _RentFormScreenState extends State<RentFormScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 DropdownButtonFormField<String>(
-                  value: _selectedClient != null && _selectedClient!.isNotEmpty ? _selectedClient : null,
-                  decoration: const InputDecoration(labelText: 'Nome do Cliente'),
-                  items: customers.map((customer) {
+                  value: _selectedClient,
+                  decoration: InputDecoration(
+                    labelText: 'Nome do Cliente',
+                    contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        width: 1,
+                        color: Theme.of(context).dividerColor,
+                      ),
+                    ),
+                  ),
+                  items: _customers.map((customer) {
                     return DropdownMenuItem<String>(
                       value: customer.name,
                       child: Text(customer.name),
@@ -113,7 +130,7 @@ class _RentFormScreenState extends State<RentFormScreen> {
                   }).toList(),
                   onChanged: (value) {
                     setState(() {
-                      _selectedClient = value!;
+                      _selectedClient = value;
                     });
                   },
                   validator: (value) {

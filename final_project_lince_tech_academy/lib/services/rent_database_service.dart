@@ -57,5 +57,12 @@ class RentDatabaseService {
     return await db.query('rents');
   }
 
-  deleteRent(int id) {}
+  Future<void> deleteRent(int id) async {
+    final db = await instance.database;
+    await db.delete(
+      'rents',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
 }

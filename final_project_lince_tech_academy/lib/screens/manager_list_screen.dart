@@ -10,7 +10,7 @@ class ManagerListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final managerProvider = Provider.of<ManagerProvider>(context);
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       managerProvider.fetchManagers();
     });
 

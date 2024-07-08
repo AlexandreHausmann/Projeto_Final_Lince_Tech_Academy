@@ -26,6 +26,7 @@ class RentProvider extends ChangeNotifier {
 
   Future<void> cancelRent(int id) async {
     await _dbService.deleteRent(id);
-    await fetchRents();
+    _rents.removeWhere((rent) => rent.id == id);
+    notifyListeners();
   }
 }

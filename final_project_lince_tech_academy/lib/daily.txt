@@ -155,16 +155,32 @@ estou trabalhando da seguinte forma, toda vez que eu dou uma travada em uma part
 por enquanto esta dando certo, pois quando eu volto no problema eu consigo resolver 
 sem duvidas 
 
+daily 04/07
+dei inicio a refatoração do aluguel, na parte de selecionar um cliente ele ja puxa da lista de clientes 
+ainda to implementando algumas regras de negócio nessa parte 
+pretendo continuar com isso 
+sem duvidas 
+
+
+daily 05/7
+daily 06/07
+daily 07/07
+
+daily 08/07
+a parte de alugueis esta quase pronta estou com um problema de overflow mais especifico no DropdownButtonFormField 
+vou tentar corrigir isso ainda hoje caso não consiga vou pedir ajuda amanha na daily ou mentoria 
+sem duvidas 
+
 //adicionar o shared preferences 
-//adicionar idioma ingles e portugues -> setings  
+
 //gerar relatório em PDF e poder imprimir 
 //ajustar cliente 
-//ajustar gerente 
+
 //ajustar veiculos
-//ajustar alugueis 
+
 //vincular cliente e gerente 
 
-aluguel 
+aluguel PDF 
   No comprovante devem conter as seguintes informações:
 • Cabeçalho com nome da empresa: SS Automóveis
 • Data da geração do comprovante
@@ -176,6 +192,3 @@ aluguel
 • Valor pago na diária
 • Valor total do aluguel
 
-// procurar uma api no final para validar o CPF -> brasil_fields
-
-//fazer um novo metodo para popular os valores 

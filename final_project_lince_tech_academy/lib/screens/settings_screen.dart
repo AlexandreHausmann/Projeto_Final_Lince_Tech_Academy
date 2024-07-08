@@ -92,7 +92,7 @@ class SettingsScreen extends StatelessWidget {
               ListTile(
                 title: const Text('Automático'),
                 onTap: () {
-                  themeProvider.setThemeMode(ThemeMode.system);
+                  themeProvider.restoreLastThemeMode();
                   Navigator.of(context).pop();
                 },
               ),
