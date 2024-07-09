@@ -96,6 +96,12 @@ class _RentFormScreenState extends State<RentFormScreen> {
     }
   }
 
+  void _selectClient(String clientName) {
+    setState(() {
+      _selectedClient = clientName;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -110,42 +116,37 @@ class _RentFormScreenState extends State<RentFormScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                DropdownButtonFormField<String>(
-                  value: _selectedClient,
-                  decoration: InputDecoration(
-                    labelText: 'Nome do Cliente',
-                    contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        width: 1,
-                        color: Theme.of(context).dividerColor,
+                PopupMenuButton<String>(
+                  onSelected: _selectClient,
+                  itemBuilder: (BuildContext context) {
+                    return _customers.map((customer) {
+                      return PopupMenuItem<String>(
+                        value: customer.name,
+                        child: Text(customer.name),
+                      );
+                    }).toList();
+                  },
+                  child: InputDecorator(
+                    decoration: InputDecoration(
+                      labelText: 'Nome do Cliente',
+                      contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          width: 1,
+                          color: Theme.of(context).dividerColor,
+                        ),
                       ),
                     ),
+                    child: Text(_selectedClient ?? 'Selecione um cliente'),
                   ),
-                  items: _customers.map((customer) {
-                    return DropdownMenuItem<String>(
-                      value: customer.name,
-                      child: Text(customer.name),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedClient = value;
-                    });
-                  },
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Por favor, selecione um cliente';
-                    }
-                    return null;
-                  },
-                  onSaved: (value) {
-                    _selectedClient = value!;
-                  },
                 ),
+                const SizedBox(height: 16),
                 TextFormField(
                   initialValue: _vehicleModel,
-                  decoration: const InputDecoration(labelText: 'Modelo do Veículo'),
+                  decoration: const InputDecoration(
+                    labelText: 'Modelo do Veículo',
+                    border: OutlineInputBorder(),
+                  ),
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Por favor, insira o modelo do veículo';
@@ -156,12 +157,16 @@ class _RentFormScreenState extends State<RentFormScreen> {
                     _vehicleModel = value!;
                   },
                 ),
+                const SizedBox(height: 16),
                 Row(
                   children: <Widget>[
                     Expanded(
                       child: TextFormField(
                         initialValue: DateFormat('dd/MM/yyyy').format(_startDate),
-                        decoration: const InputDecoration(labelText: 'Data de Início'),
+                        decoration: const InputDecoration(
+                          labelText: 'Data de Início',
+                          border: OutlineInputBorder(),
+                        ),
                         readOnly: true,
                         onTap: () => _selectStartDate(context),
                         validator: (value) {
@@ -176,7 +181,10 @@ class _RentFormScreenState extends State<RentFormScreen> {
                     Expanded(
                       child: TextFormField(
                         initialValue: DateFormat('dd/MM/yyyy').format(_endDate),
-                        decoration: const InputDecoration(labelText: 'Data de Término'),
+                        decoration: const InputDecoration(
+                          labelText: 'Data de Término',
+                          border: OutlineInputBorder(),
+                        ),
                         readOnly: true,
                         onTap: () => _selectEndDate(context),
                         validator: (value) {
@@ -189,9 +197,13 @@ class _RentFormScreenState extends State<RentFormScreen> {
                     ),
                   ],
                 ),
+                const SizedBox(height: 16),
                 TextFormField(
                   initialValue: _totalDays.toString(),
-                  decoration: const InputDecoration(labelText: 'Total de Dias'),
+                  decoration: const InputDecoration(
+                    labelText: 'Total de Dias',
+                    border: OutlineInputBorder(),
+                  ),
                   keyboardType: TextInputType.number,
                   validator: (value) {
                     if (value!.isEmpty) {
@@ -207,9 +219,13 @@ class _RentFormScreenState extends State<RentFormScreen> {
                     _totalDays = int.parse(value!);
                   },
                 ),
+                const SizedBox(height: 16),
                 TextFormField(
                   initialValue: _totalAmount.toString(),
-                  decoration: const InputDecoration(labelText: 'Valor Total'),
+                  decoration: const InputDecoration(
+                    labelText: 'Valor Total',
+                    border: OutlineInputBorder(),
+                  ),
                   keyboardType: const TextInputType.numberWithOptions(decimal: true),
                   validator: (value) {
                     if (value!.isEmpty) {

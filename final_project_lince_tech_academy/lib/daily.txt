@@ -171,6 +171,14 @@ a parte de alugueis esta quase pronta estou com um problema de overflow mais esp
 vou tentar corrigir isso ainda hoje caso não consiga vou pedir ajuda amanha na daily ou mentoria 
 sem duvidas 
 
+daily 09/07
+consegui resolver o problema da lista de clientes que estava dando um erro de layout 
+em vez de usar um DropdownButtonFormField eu usei um PopupMenuButton 
+para listar os clientes de uma forma mais customizável
+agora com a parte de alugueis faltando apenas gerar o PDF eu vou dar uma revizada no cliente
+que eu estava com um problema no pesquisa de CNPJ 
+sem duvidas 
+
 //adicionar o shared preferences 
 
 //gerar relatório em PDF e poder imprimir 
