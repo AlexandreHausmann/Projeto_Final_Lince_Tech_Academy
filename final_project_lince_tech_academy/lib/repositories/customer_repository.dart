@@ -29,15 +29,9 @@ class CustomerRepository {
     try {
       final response = await http.get(Uri.parse(url));
       if (response.statusCode == 200) {
+        print('aqui200');
         final data = json.decode(response.body);
-        return CustomerModels(
-          id: DateTime.now().millisecondsSinceEpoch,
-          cnpj: data['cnpj'],
-          name: data['razao_social'],
-          phone: data['ddd_telefone_1'],
-          city: data['municipio'],
-          state: data['uf'],
-        );
+        return CustomerModels.fromJson(data);
       } else if (response.statusCode == 400) {
         final errorData = json.decode(response.body);
         throw Exception('Erro: ${errorData['message']}');

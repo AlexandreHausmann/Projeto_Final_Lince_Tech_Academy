@@ -179,6 +179,11 @@ agora com a parte de alugueis faltando apenas gerar o PDF eu vou dar uma revizad
 que eu estava com um problema no pesquisa de CNPJ 
 sem duvidas 
 
+daily 10/07
+comecei a refatorar a parte do cliente e adicionar regras de negócio
+vou dar continuidade nessa parter quero comeaçar a documentar o código hoje
+sem duvidas  
+
 //adicionar o shared preferences 
 
 //gerar relatório em PDF e poder imprimir 

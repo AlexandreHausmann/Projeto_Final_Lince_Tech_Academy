@@ -2,7 +2,7 @@ class CustomerModels {
   final int? id;
   final String name;
   final String phone;
-  final String cnpj;
+  late final String cnpj;
   final String city;
   final String state;
 
@@ -36,4 +36,15 @@ class CustomerModels {
       state: map['state'],
     );
   }
+
+  factory CustomerModels.fromJson(Map<String, dynamic> json) {
+    return CustomerModels(
+      name: json['razao_social'],
+      phone: json['ddd_telefone_1'],
+      city: json['municipio'],
+      state: json['uf'],
+      cnpj: json['cnpj'],
+    );
+  }
+
 }
