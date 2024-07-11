@@ -41,6 +41,11 @@ class CustomerProvider extends ChangeNotifier {
   TextEditingController get stateController => _stateController;
   CustomerModels get customerCurrent => _customerCurrent;
 
+  set customerCurrent(CustomerModels customer) {
+    _customerCurrent = customer;
+    notifyListeners();
+  }
+
   Future<void> fetchCustomers() async {
     _customers = await customerRepository.getAllCustomers();
     notifyListeners();
@@ -80,11 +85,11 @@ class CustomerProvider extends ChangeNotifier {
   }
 
   void populateCustomer(CustomerModels customer) {
-    _nameController.text = customer.name ?? '';
-    _phoneController.text = customer.phone ?? '';
-    _cnpjController.text = _cnpjFormatter.maskText(customer.cnpj ?? '');
-    _cityController.text = customer.city ?? '';
-    _stateController.text = customer.state ?? '';
+    _nameController.text = customer.name;
+    _phoneController.text = customer.phone;
+    _cnpjController.text = _cnpjFormatter.maskText(customer.cnpj);
+    _cityController.text = customer.city;
+    _stateController.text = customer.state;
     notifyListeners();
   }
 

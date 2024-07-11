@@ -14,6 +14,24 @@ class CustomerModels {
     required this.city,
     required this.state,
   });
+  
+  CustomerModels copyWith({
+    int? id,
+    String? name,
+    String? phone,
+    String? cnpj,
+    String? city,
+    String? state,
+  }) {
+    return CustomerModels(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      phone: phone ?? this.phone,
+      cnpj: cnpj ?? this.cnpj,
+      city: city ?? this.city,
+      state: state ?? this.state,
+    );
+  }
 
   Map<String, dynamic> toMap() {
     return {

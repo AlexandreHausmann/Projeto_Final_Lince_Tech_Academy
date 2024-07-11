@@ -4,6 +4,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import '../providers/vehicle_provider.dart';
 import '../models/vehicle_model.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class VehicleFormScreen extends StatefulWidget {
   final VehicleModels? vehicle;
@@ -16,12 +17,12 @@ class VehicleFormScreen extends StatefulWidget {
 
 class _VehicleFormScreenState extends State<VehicleFormScreen> {
   final _formKey = GlobalKey<FormState>();
-  String? _brand; 
+  String? _brand;
   late String _model;
   late String _plate;
   late int _year;
-  late String _dailyRateText; 
-  late double _dailyRate; 
+  late String _dailyRateText;
+  late double _dailyRate;
   late String _imagePath;
 
   File? _image;
@@ -30,13 +31,23 @@ class _VehicleFormScreenState extends State<VehicleFormScreen> {
   @override
   void initState() {
     super.initState();
-    _brand = null; 
-    _model = widget.vehicle?.model ?? '';
-    _plate = widget.vehicle?.plate ?? '';
-    _year = widget.vehicle?.year ?? DateTime.now().year;
-    _dailyRate = widget.vehicle?.dailyRate ?? 0.0;
-    _dailyRateText = _dailyRate.toStringAsFixed(2); 
-    _imagePath = widget.vehicle?.imagePath ?? '';
+    if (widget.vehicle != null) {
+      _brand = widget.vehicle!.brand;
+      _model = widget.vehicle!.model;
+      _plate = widget.vehicle!.plate;
+      _year = widget.vehicle!.year;
+      _dailyRate = widget.vehicle!.dailyRate;
+      _dailyRateText = _dailyRate.toStringAsFixed(2);
+      _imagePath = widget.vehicle!.imagePath;
+    } else {
+      _brand = null;
+      _model = '';
+      _plate = '';
+      _year = DateTime.now().year;
+      _dailyRate = 0.0;
+      _dailyRateText = '';
+      _imagePath = '';
+    }
 
     _loadBrands();
   }
@@ -67,7 +78,19 @@ class _VehicleFormScreenState extends State<VehicleFormScreen> {
     }
   }
 
-  void _saveForm() {
+  Future<void> _captureImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.camera);
+
+    if (pickedFile != null) {
+      setState(() {
+        _image = File(pickedFile.path);
+        _imagePath = pickedFile.path;
+      });
+    }
+  }
+
+  Future<void> _saveForm() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       final newVehicle = VehicleModels(
@@ -82,13 +105,23 @@ class _VehicleFormScreenState extends State<VehicleFormScreen> {
 
       final vehicleProvider = Provider.of<VehicleProvider>(context, listen: false);
       if (widget.vehicle == null) {
-        vehicleProvider.addVehicle(newVehicle);
+        await vehicleProvider.addVehicle(newVehicle);
       } else {
-        vehicleProvider.updateVehicle(newVehicle);
+        await vehicleProvider.updateVehicle(newVehicle);
       }
 
       Navigator.pop(context);
       Navigator.pushNamed(context, '/vehicles');
+    }
+  }
+
+  Future<void> _requestPermissions() async {
+    if (await Permission.camera.request().isGranted && await Permission.photos.request().isGranted) {
+      return;
+    }
+    final result = await Permission.camera.request();
+    if (result.isDenied) {
+      // Mostra uma mensagem explicando por que as permissões são necessárias
     }
   }
 
@@ -209,9 +242,18 @@ class _VehicleFormScreenState extends State<VehicleFormScreen> {
                             fit: BoxFit.cover,
                           )
                         : const SizedBox.shrink(),
-                ElevatedButton(
-                  onPressed: _pickImage,
-                  child: const Text('Selecionar Imagem'),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ElevatedButton(
+                      onPressed: _pickImage,
+                      child: const Text('Selecionar Imagem'),
+                    ),
+                    ElevatedButton(
+                      onPressed: _captureImage,
+                      child: const Text('Bater Foto'),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton(

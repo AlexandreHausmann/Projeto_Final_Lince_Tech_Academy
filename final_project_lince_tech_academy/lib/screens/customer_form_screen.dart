@@ -32,20 +32,19 @@ class _CustomerFormScreenState extends State<CustomerFormScreen> {
     }
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
   Future<void> _saveForm() async {
     final customerProvider = Provider.of<CustomerProvider>(context, listen: false);
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
+      String cnpj = customerProvider.cnpjController.text.replaceAll(RegExp(r'\D'), '');
+      customerProvider.customerCurrent = customerProvider.customerCurrent.copyWith(cnpj: cnpj);
+
       if (widget.customer == null) {
         await customerProvider.addCustomer(customerProvider.customerCurrent);
       } else {
         await customerProvider.updateCustomer(customerProvider.customerCurrent);
       }
+      
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => CustomerListScreen()),
@@ -94,9 +93,7 @@ class _CustomerFormScreenState extends State<CustomerFormScreen> {
                       IconButton(
                         icon: const Icon(Icons.search),
                         onPressed: () async {
-                          String? cnpj = customerProvider
-                              .cnpjController.text
-                              .replaceAll(RegExp(r'\D'), '');
+                          String? cnpj = customerProvider.cnpjController.text.replaceAll(RegExp(r'\D'), '');
                           if (cnpj.isNotEmpty) {
                             await customerProvider.getCustomerData(cnpj);
                             customerProvider.populateCustomer(customerProvider.customerCurrent);
