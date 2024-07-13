@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:provider/provider.dart';
-import '../providers/customer_provider.dart';
+
 import '../models/customer_model.dart';
+import '../providers/customer_provider.dart';
 import 'customer_list_screen.dart';
 
+/// Tela de formulário para adicionar ou editar clientes.
 class CustomerFormScreen extends StatefulWidget {
+/// Cliente a ser editado, opcional
   final CustomerModels? customer;
 
+  /// Construtor para a tela de formulário de cliente.
+/// customer é o cliente a ser editado, opcionalmente fornecido quando editando.
   const CustomerFormScreen({Key? key, this.customer}) : super(key: key);
 
   @override
@@ -18,7 +23,7 @@ class _CustomerFormScreenState extends State<CustomerFormScreen> {
   final _formKey = GlobalKey<FormState>();
   final _cnpjFormatter = MaskTextInputFormatter(
     mask: '##.###.###/####-##',
-    filter: {"#": RegExp(r'[0-9]')},
+    filter: {'#': RegExp(r'[0-9]')},
   );
 
   @override
@@ -32,11 +37,12 @@ class _CustomerFormScreenState extends State<CustomerFormScreen> {
     }
   }
 
+  /// Salva o formulário de cliente.
   Future<void> _saveForm() async {
     final customerProvider = Provider.of<CustomerProvider>(context, listen: false);
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      String cnpj = customerProvider.cnpjController.text.replaceAll(RegExp(r'\D'), '');
+      var cnpj = customerProvider.cnpjController.text.replaceAll(RegExp(r'\D'), '');
       customerProvider.customerCurrent = customerProvider.customerCurrent.copyWith(cnpj: cnpj);
 
       if (widget.customer == null) {
@@ -137,6 +143,7 @@ class _CustomerFormScreenState extends State<CustomerFormScreen> {
                   const SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: _saveForm,
+                    
                     child: Text(widget.customer == null ? 'Salvar' : 'Atualizar'),
                   ),
                 ],

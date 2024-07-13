@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../providers/customer_provider.dart';
+
 import '../models/customer_model.dart';
+import '../providers/customer_provider.dart';
 import 'customer_form_screen.dart';
 
+/// Tela que exibe a lista de clientes cadastrados.
 class CustomerListScreen extends StatelessWidget {
+  /// key é uma chave opcional para identificar de forma única o widget.
   const CustomerListScreen({Key? key}) : super(key: key);
 
   @override

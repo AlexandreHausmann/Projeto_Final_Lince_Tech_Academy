@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../providers/rent_provider.dart';
+
 import '../models/rent_model.dart';
+import '../providers/rent_provider.dart';
 import 'rent_form_screen.dart';
 
+/// Tela que exibe a lista de contratos de aluguel.
 class RentListScreen extends StatelessWidget {
+/// key é uma chave opcional para identificar de forma única o widget.
   const RentListScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final rentProvider = Provider.of<RentProvider>(context);
+
+    /// Carrega os contratos de aluguel após a construção inicial da tela
     WidgetsBinding.instance.addPostFrameCallback((_) {
       rentProvider.fetchRents();
     });
@@ -27,6 +32,7 @@ class RentListScreen extends StatelessWidget {
       body: Consumer<RentProvider>(
         builder: (ctx, rentProvider, _) {
           if (rentProvider.rents.isEmpty) {
+            /// Exibe uma mensagem se não houver contratos de aluguel cadastrados
             return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -35,6 +41,7 @@ class RentListScreen extends StatelessWidget {
                   const SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: () {
+                      /// Navega para a tela de formulário para adicionar um novo aluguel
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (_) => const RentFormScreen()),
@@ -48,6 +55,7 @@ class RentListScreen extends StatelessWidget {
               ),
             );
           } else {
+            // Exibe a lista de contratos de aluguel
             return Column(
               children: [
                 Expanded(
@@ -59,6 +67,7 @@ class RentListScreen extends StatelessWidget {
                         title: Text(rent.clientName),
                         subtitle: Text('Veículo: ${rent.vehicleModel} - Valor: R\$ ${rent.totalAmount.toStringAsFixed(2)}'),
                         onTap: () {
+                          /// Navega para a tela de formulário para visualizar ou editar o aluguel selecionado
                           Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (_) => RentFormScreen(rent: rent),
@@ -71,6 +80,7 @@ class RentListScreen extends StatelessWidget {
                             IconButton(
                               icon: const Icon(Icons.edit),
                               onPressed: () {
+                                // Navega para a tela de formulário para editar o aluguel selecionado
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
                                     builder: (_) => RentFormScreen(rent: rent),
@@ -81,6 +91,7 @@ class RentListScreen extends StatelessWidget {
                             IconButton(
                               icon: const Icon(Icons.delete),
                               onPressed: () {
+                                // Exibe um diálogo de confirmação para exclusão do aluguel
                                 showDialog(
                                   context: context,
                                   builder: (ctx) => AlertDialog(
@@ -111,6 +122,7 @@ class RentListScreen extends StatelessWidget {
                     },
                   ),
                 ),
+                // Botão para adicionar um novo aluguel
                 Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: ElevatedButton(
@@ -133,3 +145,4 @@ class RentListScreen extends StatelessWidget {
     );
   }
 }
+

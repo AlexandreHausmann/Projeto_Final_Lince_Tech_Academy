@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/theme_provider.dart';
 
+/// Tela de configurações que permite ao usuário alterar o idioma e o tema do aplicativo.
 class SettingsScreen extends StatelessWidget {
+  /// key é uma chave opcional para identificar de forma única o widget.
   const SettingsScreen({Key? key}) : super(key: key);
 
   @override
@@ -36,6 +38,7 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 
+  /// Exibe um diálogo para seleção de idioma.
   void _showLanguageDialog(BuildContext context, ThemeProvider themeProvider) {
     showDialog(
       context: context,
@@ -66,6 +69,7 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 
+  /// Exibe um diálogo para seleção de tema (claro, escuro ou automático).
   void _showThemeDialog(BuildContext context, ThemeProvider themeProvider) {
     showDialog(
       context: context,

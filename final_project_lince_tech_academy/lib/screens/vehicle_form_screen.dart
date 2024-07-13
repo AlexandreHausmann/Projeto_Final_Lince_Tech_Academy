@@ -1,14 +1,17 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:provider/provider.dart';
-import '../providers/vehicle_provider.dart';
-import '../models/vehicle_model.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
 
+import '../models/vehicle_model.dart';
+import '../providers/vehicle_provider.dart';
+
+/// Tela para adicionar ou editar informações de um veículo.
 class VehicleFormScreen extends StatefulWidget {
   final VehicleModels? vehicle;
-
+/// key é uma chave opcional para identificar de forma única o widget.
   const VehicleFormScreen({Key? key, this.vehicle}) : super(key: key);
 
   @override
@@ -31,6 +34,7 @@ class _VehicleFormScreenState extends State<VehicleFormScreen> {
   @override
   void initState() {
     super.initState();
+    /// Inicializa os campos com os dados do veículo se estiver editando, senão inicializa vazios.
     if (widget.vehicle != null) {
       _brand = widget.vehicle!.brand;
       _model = widget.vehicle!.model;
@@ -49,9 +53,11 @@ class _VehicleFormScreenState extends State<VehicleFormScreen> {
       _imagePath = '';
     }
 
+    /// Carrega as marcas de veículos disponíveis.
     _loadBrands();
   }
 
+  /// Carrega as marcas de veículos disponíveis do provedor.
   Future<void> _loadBrands() async {
     try {
       final vehicleProvider = Provider.of<VehicleProvider>(context, listen: false);
@@ -66,6 +72,7 @@ class _VehicleFormScreenState extends State<VehicleFormScreen> {
     }
   }
 
+  /// Abre a galeria para selecionar uma imagem do veículo.
   Future<void> _pickImage() async {
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
@@ -78,6 +85,7 @@ class _VehicleFormScreenState extends State<VehicleFormScreen> {
     }
   }
 
+  /// Abre a câmera para capturar uma foto do veículo.
   Future<void> _captureImage() async {
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: ImageSource.camera);
@@ -90,6 +98,7 @@ class _VehicleFormScreenState extends State<VehicleFormScreen> {
     }
   }
 
+  /// Salva o formulário de veículo após validação e submissão.
   Future<void> _saveForm() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
@@ -104,24 +113,27 @@ class _VehicleFormScreenState extends State<VehicleFormScreen> {
       );
 
       final vehicleProvider = Provider.of<VehicleProvider>(context, listen: false);
+      /// Adiciona um novo veículo se estiver criando, ou atualiza se estiver editando.
       if (widget.vehicle == null) {
         await vehicleProvider.addVehicle(newVehicle);
       } else {
         await vehicleProvider.updateVehicle(newVehicle);
       }
 
+      /// Fecha a tela de formulário e navega de volta para a lista de veículos.
       Navigator.pop(context);
       Navigator.pushNamed(context, '/vehicles');
     }
   }
 
+  /// Solicita permissões necessárias para acessar a câmera e galeria de fotos.
   Future<void> _requestPermissions() async {
     if (await Permission.camera.request().isGranted && await Permission.photos.request().isGranted) {
       return;
     }
     final result = await Permission.camera.request();
     if (result.isDenied) {
-      // Mostra uma mensagem explicando por que as permissões são necessárias
+      /// Mostra uma mensagem explicando por que as permissões são necessárias.
     }
   }
 
@@ -139,6 +151,7 @@ class _VehicleFormScreenState extends State<VehicleFormScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
+                /// Dropdown para seleção da marca do veículo.
                 _brands.isNotEmpty
                     ? DropdownButtonFormField<String>(
                         value: _brand,
@@ -162,6 +175,7 @@ class _VehicleFormScreenState extends State<VehicleFormScreen> {
                         },
                       )
                     : const SizedBox.shrink(),
+                /// Campo de texto para inserção do modelo do veículo.
                 TextFormField(
                   initialValue: _model,
                   decoration: const InputDecoration(labelText: 'Modelo'),
@@ -175,6 +189,7 @@ class _VehicleFormScreenState extends State<VehicleFormScreen> {
                     _model = value!;
                   },
                 ),
+                /// Campo de texto para inserção da placa do veículo.
                 TextFormField(
                   initialValue: _plate,
                   decoration: const InputDecoration(labelText: 'Placa'),
@@ -188,6 +203,7 @@ class _VehicleFormScreenState extends State<VehicleFormScreen> {
                     _plate = value!;
                   },
                 ),
+                /// Campo de texto para inserção do ano de fabricação do veículo.
                 TextFormField(
                   initialValue: _year.toString(),
                   decoration: const InputDecoration(labelText: 'Ano de Fabricação'),
@@ -206,6 +222,7 @@ class _VehicleFormScreenState extends State<VehicleFormScreen> {
                     _year = int.parse(value!);
                   },
                 ),
+                /// Campo de texto para inserção do custo da diária de aluguel do veículo.
                 TextFormField(
                   initialValue: _dailyRateText.isNotEmpty ? 'R\$ $_dailyRateText' : '',
                   decoration: const InputDecoration(labelText: 'Custo da Diária de Aluguel'),
@@ -227,6 +244,7 @@ class _VehicleFormScreenState extends State<VehicleFormScreen> {
                   },
                 ),
                 const SizedBox(height: 20),
+                /// Exibe a imagem selecionada ou botaões para selecionar ou capturar uma imagem.
                 _image != null
                     ? Image.file(
                         _image!,
@@ -242,6 +260,7 @@ class _VehicleFormScreenState extends State<VehicleFormScreen> {
                             fit: BoxFit.cover,
                           )
                         : const SizedBox.shrink(),
+                /// Botoões para selecionar uma imagem da galeria ou capturar uma foto.
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -256,6 +275,7 @@ class _VehicleFormScreenState extends State<VehicleFormScreen> {
                   ],
                 ),
                 const SizedBox(height: 20),
+                /// Botoão para salvar o formulário de veículo.
                 ElevatedButton(
                   onPressed: _saveForm,
                   child: Text(widget.vehicle == null ? 'Salvar' : 'Atualizar'),

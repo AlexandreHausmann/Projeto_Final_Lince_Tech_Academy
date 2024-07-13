@@ -1,11 +1,19 @@
+/// Modelo de dados para um cliente.
 class CustomerModels {
+  /// Identificador único do cliente.
   final int? id;
+  /// Nome do cliente.
   final String name;
+  /// Número de telefone do cliente.
   final String phone;
-  late final String cnpj;
+  /// CNPJ do cliente.
+  final String cnpj;
+  /// Cidade do cliente.
   final String city;
+  /// Estado do cliente.
   final String state;
 
+  /// Construtor da classe `CustomerModels`.
   CustomerModels({
     this.id,
     required this.name,
@@ -14,7 +22,8 @@ class CustomerModels {
     required this.city,
     required this.state,
   });
-  
+
+  /// Cria uma cópia da instância de `CustomerModels` com novos valores opcionais.
   CustomerModels copyWith({
     int? id,
     String? name,
@@ -33,6 +42,7 @@ class CustomerModels {
     );
   }
 
+  /// Converte a instância de `CustomerModels` para uma representação de mapa.
   Map<String, dynamic> toMap() {
     return {
       'id': id,
@@ -44,6 +54,7 @@ class CustomerModels {
     };
   }
 
+  /// Cria uma instância de `CustomerModels` a partir de um mapa.
   factory CustomerModels.fromMap(Map<String, dynamic> map) {
     return CustomerModels(
       id: map['id'],
@@ -55,6 +66,7 @@ class CustomerModels {
     );
   }
 
+  /// Cria uma instância de `CustomerModels` a partir de um objeto JSON.
   factory CustomerModels.fromJson(Map<String, dynamic> json) {
     return CustomerModels(
       name: json['razao_social'],
@@ -64,5 +76,4 @@ class CustomerModels {
       cnpj: json['cnpj'],
     );
   }
-
 }

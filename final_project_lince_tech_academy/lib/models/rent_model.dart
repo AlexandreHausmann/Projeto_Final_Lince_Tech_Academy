@@ -1,12 +1,21 @@
+/// Modelo de dados para um contrato de aluguel.
 class RentModels {
+  /// Identificador único do contrato de aluguel.
   final int? id;
+  /// Nome do cliente que está alugando o veículo.
   final String clientName;
+  /// Modelo do veículo sendo alugado.
   final String vehicleModel;
+  /// Data de início do aluguel.
   final DateTime startDate;
+  /// Data de término do aluguel.
   final DateTime endDate;
+  /// Total de dias de duração do aluguel.
   final int totalDays;
+  /// Valor total do aluguel.
   final double totalAmount;
 
+  /// Construtor da classe `RentModels`.
   RentModels({
     this.id,
     required this.clientName,
@@ -17,8 +26,7 @@ class RentModels {
     required this.totalAmount,
   });
 
-  get customerName => null;
-
+  /// Converte a instância de `RentModels` para uma representação de mapa.
   Map<String, dynamic> toMap() {
     return {
       'id': id,
@@ -31,6 +39,7 @@ class RentModels {
     };
   }
 
+  /// Cria uma instância de `RentModels` a partir de um mapa.
   factory RentModels.fromMap(Map<String, dynamic> map) {
     return RentModels(
       id: map['id'],

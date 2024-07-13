@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'settings_screen.dart';
 
+/// Tela inicial da aplicação que exibe um menu de navegação para diferentes funcionalidades.
 class HomeScreen extends StatelessWidget {
+  /// key é uma chave opcional para identificar de forma única o widget.
   const HomeScreen({Key? key}) : super(key: key);
 
   @override

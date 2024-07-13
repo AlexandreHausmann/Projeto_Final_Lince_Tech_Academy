@@ -1,12 +1,13 @@
-// manager_form_screen.dart
-
-import 'package:final_project_lince_tech_academy/controller/manager_form_controller.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+
+import '../controller/manager_form_controller.dart';
 import '../models/manager_model.dart';
 import '../providers/manager_provider.dart';
 
+/// Lista de estados brasileiros para o dropdown de estado.
 const List<Map<String, String>> estadosBrasileiros = [
   {'name': 'Acre', 'uf': 'AC'},
   {'name': 'Alagoas', 'uf': 'AL'},
@@ -37,9 +38,11 @@ const List<Map<String, String>> estadosBrasileiros = [
   {'name': 'Tocantins', 'uf': 'TO'},
 ];
 
+/// Tela de formulário para adicionar ou editar um gerente.
 class ManagerFormScreen extends StatefulWidget {
+///
   final ManagerModels? manager;
-
+/// key é uma chave opcional para identificar de forma única o widget.
   const ManagerFormScreen({Key? key, this.manager}) : super(key: key);
 
   @override
@@ -66,8 +69,10 @@ class _ManagerFormScreenState extends State<ManagerFormScreen> {
     _controller = ManagerController(Provider.of<ManagerProvider>(context, listen: false));
   }
 
+  /// Capitaliza a primeira letra de uma string.
   String capitalize(String s) => s[0].toUpperCase() + s.substring(1);
 
+  /// Salva o formulário após validação e executa a adição ou atualização do gerente.
   void _saveForm() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
@@ -90,8 +95,8 @@ class _ManagerFormScreenState extends State<ManagerFormScreen> {
         await _controller.fetchManagers();
 
         Navigator.pushReplacementNamed(context, '/managers');
-      } catch (e) {
-        print('Error saving manager: $e');
+      } catch (error) {
+       ///aqui para erro
       }
     }
   }
@@ -137,7 +142,7 @@ class _ManagerFormScreenState extends State<ManagerFormScreen> {
                       return 'Por favor, insira o CPF';
                     }
                     if (value.length != 14) {
-                      return 'Verifique o CPF, ele deve conter 11 numeros';
+                      return 'CPF inválido, ele deve conter 11 números';
                     }
                     return null;
                   },
@@ -226,6 +231,7 @@ class _ManagerFormScreenState extends State<ManagerFormScreen> {
   }
 }
 
+/// Formatter para formatar o CPF com pontos e traço durante a digitação.
 class _CpfInputFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
@@ -254,6 +260,7 @@ class _CpfInputFormatter extends TextInputFormatter {
   }
 }
 
+/// Formatter para formatar o telefone com parênteses, espaço e traço durante a digitação.
 class _PhoneInputFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {

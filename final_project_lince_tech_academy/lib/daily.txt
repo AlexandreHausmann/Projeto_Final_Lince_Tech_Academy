@@ -184,28 +184,21 @@ comecei a refatorar a parte do cliente e adicionar regras de negócio
 vou dar continuidade nessa parter quero comeaçar a documentar o código hoje
 sem duvidas  
 
+daily 11/07 
+finalizei a parte de clientes, dei inicio a refatoração e adicionar imagens a veiculos e ja finalizei tambem
+dei inicio a documentação e vou continuar documentando 
+ainda tenho que ver a parte de alugueis e ver oque precisa ainda 
+sem duvidas 
 
+daily 12/07
+finalizei a parte de aluguel e a documentação 
+pro fim de semana vou tentar fazer a parte do PDF 
+a internacionalização não vai entrar mas a principio é só 
 
-// só falta mecher no botão de atualizar no cliente 
+sobre a documentação pode ser em portugues né ? 
+
 
 //adicionar o shared preferences 
-
 //gerar relatório em PDF e poder imprimir 
-//ajustar cliente 
 
-//ajustar veiculos
-
-//vincular cliente e gerente 
-
-aluguel PDF 
-  No comprovante devem conter as seguintes informações:
-• Cabeçalho com nome da empresa: SS Automóveis
-• Data da geração do comprovante
-• Dados do cliente
-• Dados do veículo (incluindo foto)
-• Dados do gerente
-• Período do aluguel
-• Total de dias do período
-• Valor pago na diária
-• Valor total do aluguel
-
+internacionalizacao

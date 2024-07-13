@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import '../providers/rent_provider.dart';
-import '../providers/customer_provider.dart';
-import '../models/rent_model.dart';
-import '../models/customer_model.dart';
 
+import '../models/customer_model.dart';
+import '../models/rent_model.dart';
+import '../models/vehicle_model.dart';
+import '../providers/customer_provider.dart';
+import '../providers/rent_provider.dart';
+import '../providers/vehicle_provider.dart';
+
+/// Tela de formulário para adicionar ou editar um contrato de aluguel.
 class RentFormScreen extends StatefulWidget {
+  /// O contrato de aluguel a ser editado, opcional se for para adicionar um novo contrato.
   final RentModels? rent;
 
+  /// Construtor da tela `RentFormScreen`.
   const RentFormScreen({Key? key, this.rent}) : super(key: key);
 
   @override
@@ -18,25 +24,35 @@ class RentFormScreen extends StatefulWidget {
 class _RentFormScreenState extends State<RentFormScreen> {
   final _formKey = GlobalKey<FormState>();
   String? _selectedClient;
-  late String _vehicleModel;
+  String? _selectedVehicle;
   late DateTime _startDate;
   late DateTime _endDate;
-  late int _totalDays;
-  late double _totalAmount;
+  int? _totalDays;
+  double? _totalAmount;
+  late double _dailyRate;
   List<CustomerModels> _customers = [];
+  List<VehicleModels> _vehicles = [];
+
+  final TextEditingController _startDateController = TextEditingController();
+  final TextEditingController _endDateController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     _selectedClient = widget.rent?.clientName;
-    _vehicleModel = widget.rent?.vehicleModel ?? '';
+    _selectedVehicle = widget.rent?.vehicleModel;
     _startDate = widget.rent?.startDate ?? DateTime.now();
     _endDate = widget.rent?.endDate ?? DateTime.now();
     _totalDays = widget.rent?.totalDays ?? 0;
     _totalAmount = widget.rent?.totalAmount ?? 0.0;
+    _dailyRate = 0.0;
+    _startDateController.text = DateFormat('dd/MM/yyyy').format(_startDate);
+    _endDateController.text = DateFormat('dd/MM/yyyy').format(_endDate);
     _loadCustomers();
+    _loadVehicles();
   }
 
+  /// Carrega a lista de clientes do provedor de clientes.
   Future<void> _loadCustomers() async {
     final customerProvider = Provider.of<CustomerProvider>(context, listen: false);
     await customerProvider.fetchCustomers();
@@ -45,17 +61,27 @@ class _RentFormScreenState extends State<RentFormScreen> {
     });
   }
 
+  /// Carrega a lista de veículos do provedor de veículos.
+  Future<void> _loadVehicles() async {
+    final vehicleProvider = Provider.of<VehicleProvider>(context, listen: false);
+    await vehicleProvider.fetchVehicles();
+    setState(() {
+      _vehicles = vehicleProvider.vehicles;
+    });
+  }
+
+  /// Salva o formulário após validação e executa a adição ou atualização do contrato de aluguel.
   void _saveForm() {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       final newRent = RentModels(
         id: widget.rent?.id ?? DateTime.now().millisecondsSinceEpoch,
         clientName: _selectedClient!,
-        vehicleModel: _vehicleModel,
+        vehicleModel: _selectedVehicle!,
         startDate: _startDate,
         endDate: _endDate,
-        totalDays: _totalDays,
-        totalAmount: _totalAmount,
+        totalDays: _totalDays!,
+        totalAmount: _totalAmount!,
       );
 
       if (widget.rent == null) {
@@ -68,37 +94,45 @@ class _RentFormScreenState extends State<RentFormScreen> {
     }
   }
 
-  Future<void> _selectStartDate(BuildContext context) async {
-    final DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: _startDate,
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2100),
-    );
-    if (pickedDate != null) {
-      setState(() {
-        _startDate = pickedDate;
-      });
-    }
+  /// Atualiza o número total de dias com base nas datas de início e término selecionadas.
+  void _updateTotalDays() {
+    setState(() {
+      _totalDays = _endDate.difference(_startDate).inDays + 1;
+    });
   }
 
-  Future<void> _selectEndDate(BuildContext context) async {
-    final DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: _endDate,
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2100),
-    );
-    if (pickedDate != null) {
-      setState(() {
-        _endDate = pickedDate;
-      });
-    }
+  /// Atualiza o valor da diária do veículo selecionado.
+  void _updateDailyRate() {
+    final selectedVehicle = _vehicles.firstWhere((vehicle) => vehicle.model == _selectedVehicle);
+    _dailyRate = selectedVehicle.dailyRate;
   }
 
+  /// Calcula o valor total do contrato de aluguel com base nos dias totais e na taxa diária.
+  void _calculateTotalAmount() {
+    setState(() {
+      _totalAmount = _totalDays! * _dailyRate;
+    });
+  }
+
+  /// Calcula tanto o número total de dias quanto o valor total do contrato de aluguel.
+  void _calculateDaysAndAmount() {
+    _updateTotalDays();
+    _calculateTotalAmount();
+  }
+
+  /// Seleciona um cliente para o contrato de aluguel.
   void _selectClient(String clientName) {
     setState(() {
       _selectedClient = clientName;
+    });
+  }
+
+  /// Seleciona um veículo para o contrato de aluguel e atualiza a taxa diária e o valor total.
+  void _selectVehicle(String vehicleModel) {
+    setState(() {
+      _selectedVehicle = vehicleModel;
+      _updateDailyRate();
+      _calculateTotalAmount();
     });
   }
 
@@ -141,110 +175,147 @@ class _RentFormScreenState extends State<RentFormScreen> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                TextFormField(
-                  initialValue: _vehicleModel,
-                  decoration: const InputDecoration(
-                    labelText: 'Modelo do Veículo',
-                    border: OutlineInputBorder(),
+                PopupMenuButton<String>(
+                  onSelected: _selectVehicle,
+                  itemBuilder: (BuildContext context) {
+                    return _vehicles.map((vehicle) {
+                      return PopupMenuItem<String>(
+                        value: vehicle.model,
+                        child: Text(vehicle.model),
+                      );
+                    }).toList();
+                  },
+                  child: InputDecorator(
+                    decoration: InputDecoration(
+                      labelText: 'Modelo do Veículo',
+                      contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          width: 1,
+                          color: Theme.of(context).dividerColor,
+                        ),
+                      ),
+                    ),
+                    child: Text(_selectedVehicle ?? 'Selecione um veículo'),
                   ),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Por favor, insira o modelo do veículo';
-                    }
-                    return null;
-                  },
-                  onSaved: (value) {
-                    _vehicleModel = value!;
-                  },
                 ),
                 const SizedBox(height: 16),
                 Row(
                   children: <Widget>[
                     Expanded(
                       child: TextFormField(
-                        initialValue: DateFormat('dd/MM/yyyy').format(_startDate),
+                        controller: _startDateController,
                         decoration: const InputDecoration(
-                          labelText: 'Data de Início',
+                          labelText: 'Data de Início (dd/mm/yyyy)',
                           border: OutlineInputBorder(),
                         ),
-                        readOnly: true,
-                        onTap: () => _selectStartDate(context),
+                        keyboardType: TextInputType.datetime,
                         validator: (value) {
                           if (value!.isEmpty) {
                             return 'Por favor, insira a data de início';
                           }
                           return null;
                         },
+                        onTap: () async {
+                          var pickedDate = await showDatePicker(
+                            context: context,
+                            initialDate: _startDate,
+                            firstDate: DateTime(2000),
+                            lastDate: DateTime(2100),
+                          );
+                          if (pickedDate != null) {
+                            setState(() {
+                              _startDate = pickedDate;
+                              _startDateController.text = DateFormat('dd/MM/yyyy').format(pickedDate);
+                              _updateTotalDays();
+                              _calculateTotalAmount();
+                            });
+                          }
+                        },
                       ),
                     ),
                     const SizedBox(width: 10),
                     Expanded(
                       child: TextFormField(
-                        initialValue: DateFormat('dd/MM/yyyy').format(_endDate),
+                        controller: _endDateController,
                         decoration: const InputDecoration(
-                          labelText: 'Data de Término',
+                          labelText: 'Data de Término (dd/mm/yyyy)',
                           border: OutlineInputBorder(),
                         ),
-                        readOnly: true,
-                        onTap: () => _selectEndDate(context),
+                        keyboardType: TextInputType.datetime,
                         validator: (value) {
                           if (value!.isEmpty) {
                             return 'Por favor, insira a data de término';
                           }
                           return null;
                         },
+                        onTap: () async {
+                          var pickedDate = await showDatePicker(
+                            context: context,
+                            initialDate: _endDate,
+                            firstDate: _startDate,
+                            lastDate: DateTime(2100),
+                          );
+                          if (pickedDate != null) {
+                            setState(() {
+                              _endDate = pickedDate;
+                              _endDateController.text = DateFormat('dd/MM/yyyy').format(pickedDate);
+                              _updateTotalDays();
+                              _calculateTotalAmount();
+                            });
+                          }
+                        },
                       ),
                     ),
                   ],
                 ),
                 const SizedBox(height: 16),
-                TextFormField(
-                  initialValue: _totalDays.toString(),
-                  decoration: const InputDecoration(
-                    labelText: 'Total de Dias',
-                    border: OutlineInputBorder(),
-                  ),
-                  keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Por favor, insira o total de dias';
-                    }
-                    final totalDays = int.tryParse(value);
-                    if (totalDays == null || totalDays <= 0) {
-                      return 'Por favor, insira um valor válido';
-                    }
-                    return null;
-                  },
-                  onSaved: (value) {
-                    _totalDays = int.parse(value!);
-                  },
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: _calculateDaysAndAmount,
+                        child: Text('Calcular Dias e Valor Total'),
+                      ),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 16),
-                TextFormField(
-                  initialValue: _totalAmount.toString(),
-                  decoration: const InputDecoration(
-                    labelText: 'Valor Total',
-                    border: OutlineInputBorder(),
-                  ),
-                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Por favor, insira o valor total';
-                    }
-                    final totalAmount = double.tryParse(value);
-                    if (totalAmount == null || totalAmount <= 0) {
-                      return 'Por favor, insira um valor válido';
-                    }
-                    return null;
-                  },
-                  onSaved: (value) {
-                    _totalAmount = double.parse(value!);
-                  },
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: TextFormField(
+                        decoration: const InputDecoration(
+                          labelText: 'Total de Dias',
+                          border: OutlineInputBorder(),
+                        ),
+                        readOnly: true,
+                        controller: TextEditingController(text: _totalDays?.toString()),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: TextFormField(
+                        decoration: const InputDecoration(
+                          labelText: 'Valor Total (R\$)',
+                          border: OutlineInputBorder(),
+                        ),
+                        readOnly: true,
+                        controller: TextEditingController(text: _totalAmount?.toStringAsFixed(2)),
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: _saveForm,
-                  child: Text(widget.rent == null ? 'Salvar' : 'Atualizar'),
+                const SizedBox(height: 16),
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: _saveForm,
+                        child: Text(widget.rent == null ? 'Salvar' : 'Atualizar'),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
