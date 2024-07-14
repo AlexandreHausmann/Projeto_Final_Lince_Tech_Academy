@@ -44,6 +44,7 @@ dependencies:
   cpf_cnpj_validator: ^2.0.0
   permission_handler: ^11.3.1
   url_launcher: ^6.3.0
+  printing: ^5.13.1
 
 dev_dependencies:
   flutter_test:

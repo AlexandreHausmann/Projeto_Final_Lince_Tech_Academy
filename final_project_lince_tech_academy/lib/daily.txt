@@ -1,3 +1,16 @@
+aqui estão as daily de cada dia e oque eu fiz nos dias des do dia 
+03/06 até 14/07
+
+
+..............................PONTOS IMPORTANTES QUE FALTARAM..............................
+shared preferences => tive bastante dificuldade para usar mesmo com pesquisa então resolvi fazer de uma forma diferente 
+internacionalização => comecei a fazer porem comecei a me complicar e me perder dentro do código, deixei para o final 
+e acabou não dando mais tempo 
+PFD => comecei a fazer no final de semana acredito que com uns dois dias de trabalho em cima do código conseguiria entregar 
+Carregar o Gerente de acordo com o estado => não implementei essa parte pois achei errado ser restringido apenas ao gerente do seu estado 
+tendo em vista que eu poderia estar em viagem em outro estado 
+
+
 daily 03/06
 iniciei o projeto, fiz apenas a tela inicial 
 pretendo dar funcionalidade aos botões 
@@ -197,8 +210,7 @@ a internacionalização não vai entrar mas a principio é só
 
 sobre a documentação pode ser em portugues né ? 
 
+daily 13/07 
+terminei a parte de alugueis vou começar o pdf
 
-//adicionar o shared preferences 
-//gerar relatório em PDF e poder imprimir 
 
-internacionalizacao
